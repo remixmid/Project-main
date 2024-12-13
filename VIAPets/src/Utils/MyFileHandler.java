@@ -61,11 +61,15 @@ public class MyFileHandler {
     }
 
     public static void writeArrayToBinaryFile(String fileName, Object[] obj) throws FileNotFoundException, IOException {
-        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName)))
+        try
         {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
             for (int i = 0; i < obj.length; i++) {
                 out.writeObject(obj[i]);
             }
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -78,14 +82,13 @@ public class MyFileHandler {
 
     public static Object[] readArrayFromBinaryFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
         ArrayList<Object> objects = new ArrayList<>();
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
-            while (true) {
-                try {
-                    objects.add(in.readObject());
-                } catch (EOFException e) {
-                    break;
-                }
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
+            while (in.available() > 0) {
+                objects.add(in.readObject());
             }
+            in.close();
+        } catch (EOFException e) {
         }
         return objects.toArray();
     }

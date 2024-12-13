@@ -1,12 +1,24 @@
+package com;
+
 import Model.Pet;
 import Model.PetList;
 import Utils.MyFileHandler;
 
+import java.io.File;
+
 public class PetListModelManager {
     private String fileName;
 
-    public PetListModelManager(String fileName) {
+    public PetListModelManager() {
         fileName = "Pets.bin";
+        try {
+            File file = new File(fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public PetList getAllPets() {
