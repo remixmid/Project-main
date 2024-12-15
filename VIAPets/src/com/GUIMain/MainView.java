@@ -54,7 +54,6 @@ public class MainView extends Application {
         tableView1.setMinSize(590, 338);
         TableColumn<Pet, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
         TableColumn<Pet, Integer> ageColumn = new TableColumn<>("Age");
         ageColumn.setCellValueFactory(new PropertyValueFactory<>("age"));
         TableColumn<Pet,String> genderColumn = new TableColumn<>("Gender");

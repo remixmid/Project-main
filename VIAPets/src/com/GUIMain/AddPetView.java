@@ -115,7 +115,7 @@ public class AddPetView {
         stage.setResizable(true);
         stage.show();
         saveButtonDog.setOnAction(listener);
-        saveButton.setOnAction(event -> stage.close());
+
     }
 
     private class MyListener implements EventHandler<ActionEvent> {
