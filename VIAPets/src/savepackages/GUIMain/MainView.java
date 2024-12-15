@@ -268,20 +268,20 @@ public class MainView extends Application {
     }
 
 
-    private class MyTabListener implements ChangeListener<Tab>
-    {
-        public void changed(ObservableValue<? extends Tab> tab, Tab oldTab, Tab newTab)
-        {
-            if (newTab == tab1)
-            {
-                updateStudentArea();
-            }
-            else if (newTab == changeCountryTab)
-            {
-                updateStudentBox();
-            }
-        }
-    }
+ //   private class MyTabListener implements ChangeListener<Tab>
+  //  {
+   //     public void changed(ObservableValue<? extends Tab> tab, Tab oldTab, Tab newTab)
+   //     {
+   //         if (newTab == tab1)
+    //        {
+    //            updateStudentArea();
+    //        }
+    //        else if (newTab == changeCountryTab)
+    //        {
+   //             updateStudentBox();
+   //         }
+  //      }
+  //  }
 
 
     public static void main(String[] args) {

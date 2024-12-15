@@ -12,22 +12,38 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class AddCustomerView {
+    private ColumnConstraints column2;
+    private AnchorPane anchorPane;
+    private GridPane gridPane;
+    private ColumnConstraints column1;
+    private Label nameLabel;
+    private Label emailLabel;
+    private Label phoneLabel;
+    private Label addressLabel;
+    private TextField addressField;
+    private TextField nameField;
+    private TextField emailField;
+    private TextField phoneField;
+    private Button saveButton;
+    private Stage stage;
+    private RowConstraints row;
+
     public void display() {
         // Create AnchorPane
-        AnchorPane anchorPane = new AnchorPane();
+        anchorPane = new AnchorPane();
         anchorPane.setPrefSize(431.0, 242.0);
 
         // Create GridPane
-        GridPane gridPane = new GridPane();
+        gridPane = new GridPane();
         gridPane.setPrefSize(429.0, 227.0);
 
         // Add Column Constraints
-        ColumnConstraints column1 = new ColumnConstraints();
+        column1 = new ColumnConstraints();
         column1.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         column1.setMinWidth(10.0);
         column1.setPrefWidth(100.0);
 
-        ColumnConstraints column2 = new ColumnConstraints();
+        column2 = new ColumnConstraints();
         column2.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         column2.setMinWidth(10.0);
         column2.setPrefWidth(100.0);
@@ -36,7 +52,7 @@ public class AddCustomerView {
 
         // Add Row Constraints
         for (int i = 0; i < 8; i++) {
-            RowConstraints row = new RowConstraints();
+            row = new RowConstraints();
             row.setMinHeight(10.0);
             row.setPrefHeight(30.0);
             row.setVgrow(javafx.scene.layout.Priority.SOMETIMES);
@@ -44,18 +60,27 @@ public class AddCustomerView {
         }
 
         // Add Labels
-        gridPane.add(new Label("Name"), 0, 0);
-        gridPane.add(new Label("Email"), 0, 1);
-        gridPane.add(new Label("Phone number"), 0, 2);
-        gridPane.add(new Label("Address"), 0, 3);
+        nameLabel = new Label("Name");
+        emailLabel = new Label("Email");
+        phoneLabel = new Label("Phone number");
+        addressLabel = new Label("Address");
+        gridPane.add(nameLabel, 0, 0);
+        gridPane.add(emailLabel, 0, 1);
+        gridPane.add(phoneLabel, 0, 2);
+        gridPane.add(addressLabel, 0, 3);
 
         // Add TextFields
-        for (int i = 0; i < 4; i++) {
-            gridPane.add(new TextField(), 1, i);
-        }
+        nameField = new TextField();
+        emailField = new TextField();
+        phoneField = new TextField();
+        addressField = new TextField();
+        gridPane.add(nameField, 1, 0);
+        gridPane.add(emailField, 1, 1);
+        gridPane.add(phoneField, 1, 2);
+        gridPane.add(addressField, 1, 3);
 
-        // Add Button
-        Button saveButton = new Button("Save");
+        // Save Button
+        saveButton = new Button("Save");
         saveButton.setMnemonicParsing(false);
         saveButton.setPrefSize(95.0, 25.0);
         gridPane.add(saveButton, 1, 7);
@@ -64,7 +89,7 @@ public class AddCustomerView {
         anchorPane.getChildren().add(gridPane);
 
         // Create and Show Stage
-        Stage stage = new Stage();
+        stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Add Customer");
         stage.setScene(new Scene(anchorPane));

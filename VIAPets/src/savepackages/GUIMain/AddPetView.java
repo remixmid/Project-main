@@ -39,23 +39,33 @@ public class AddPetView {
     TextField commentField = new TextField();
     TextField breedField = new TextField();
     TextField breederField = new TextField();
+    private AnchorPane anchorPane;
+    private ColumnConstraints column1;
+    private ColumnConstraints column2;
+    private Stage stage;
+    private RowConstraints row;
+    private Stage currentStage;
+    private Button saveButtonHamster;
+    private Button saveButtonFish;
+    private Button saveButtonRodent;
+    private Button saveButtonOther;
 
 
     public void display() {
         // Create AnchorPane
-        AnchorPane anchorPane = new AnchorPane();
-        anchorPane.setPrefSize(431.0, 242.0);
+        anchorPane = new AnchorPane();
+        anchorPane.setPrefSize(450.0, 250.0);
 
         // Create GridPane
         gridPane.setPrefSize(429.0, 227.0);
 
         // Add Column Constraints
-        ColumnConstraints column1 = new ColumnConstraints();
+        column1 = new ColumnConstraints();
         column1.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         column1.setMinWidth(10.0);
         column1.setPrefWidth(100.0);
 
-        ColumnConstraints column2 = new ColumnConstraints();
+        column2 = new ColumnConstraints();
         column2.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         column2.setMinWidth(10.0);
         column2.setPrefWidth(100.0);
@@ -64,7 +74,7 @@ public class AddPetView {
 
         // Add Row Constraints
         for (int i = 0; i < 9; i++) {
-            RowConstraints row = new RowConstraints();
+            row = new RowConstraints();
             row.setMinHeight(10.0);
             row.setPrefHeight(30.0);
             row.setVgrow(javafx.scene.layout.Priority.SOMETIMES);
@@ -87,7 +97,7 @@ public class AddPetView {
         gridPane.add(breeder, 0, 8);
         gridPane.add(new TextField(), 1, 8);
 
-
+        // Add TextField
         gridPane.add(nameField, 1, 1);
         gridPane.add(ageField, 1, 2);
         gridPane.add(genderField, 1, 3);
@@ -96,8 +106,7 @@ public class AddPetView {
         gridPane.add(commentField, 1, 6);
         gridPane.add(breedField, 1, 7);
         gridPane.add(breederField,1,8);
-        // Add Button
-        // Add Button
+
 
         saveButton.setMnemonicParsing(false);
         saveButton.setPrefSize(95.0, 25.0);
@@ -108,7 +117,7 @@ public class AddPetView {
         anchorPane.getChildren().add(gridPane);
 
         // Set Scene
-        Stage stage = new Stage();
+        stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Add Pet");
         stage.setScene(new Scene(anchorPane));
@@ -140,7 +149,7 @@ public class AddPetView {
             // Clear previous animal-specific fields
             gridPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) > 5);
 
-            Stage currentStage = (Stage) gridPane.getScene().getWindow();
+            currentStage = (Stage) gridPane.getScene().getWindow();
 
             switch (animalType) {
                 case "Dog":
@@ -168,7 +177,7 @@ public class AddPetView {
                 case "Bird":
                     gridPane.add(new Label("Prefered food"), 0, 6);
                     gridPane.add(new TextField(), 1, 6);
-                    Button saveButtonHamster = new Button("Save");
+                    saveButtonHamster = new Button("Save");
                     saveButtonHamster.setMnemonicParsing(false);
                     saveButtonHamster.setPrefSize(95.0, 25.0);
                     gridPane.add(saveButtonHamster, 1, 7);
@@ -178,7 +187,7 @@ public class AddPetView {
                     gridPane.add(new TextField(), 1, 6);
                     gridPane.add(new Label("Predator status"), 0, 7);
                     gridPane.add(new TextField(), 1, 7);
-                    Button saveButtonFish = new Button("Save");
+                    saveButtonFish = new Button("Save");
                     saveButtonFish.setMnemonicParsing(false);
                     saveButtonFish.setPrefSize(95.0, 25.0);
                     gridPane.add(saveButtonFish, 1, 8);
@@ -186,7 +195,7 @@ public class AddPetView {
                 case "Rodent":
                     gridPane.add(new Label("Biting tendency"), 0, 6);
                     gridPane.add(new TextField(), 1, 6);
-                    Button saveButtonRodent = new Button("Save");
+                    saveButtonRodent = new Button("Save");
                     saveButtonRodent.setMnemonicParsing(false);
                     saveButtonRodent.setPrefSize(95.0, 25.0);
                     gridPane.add(saveButtonRodent, 1, 7);
@@ -194,7 +203,7 @@ public class AddPetView {
                 case "Other":
                     gridPane.add(new Label("Other"), 0, 6);
                     gridPane.add(new TextField(), 1, 6);
-                    Button saveButtonOther = new Button("Save");
+                    saveButtonOther = new Button("Save");
                     saveButtonOther.setMnemonicParsing(false);
                     saveButtonOther.setPrefSize(95.0, 25.0);
                     gridPane.add(saveButtonOther, 1, 7);
