@@ -27,6 +27,18 @@ public class AddPetView {
     Label comment = new Label("Comment");
     Label breed = new Label("Breed");
     Label breeder = new Label("Breeder");
+    Button saveButtonDog = new Button("Save");
+    MyListener listener = new MyListener();
+    Button saveButton = new Button("Save");
+    Button saveButtonCat = new Button("Save");
+    TextField nameField = new TextField();
+    TextField ageField = new TextField();
+    TextField genderField = new TextField();
+    TextField colorField = new TextField();
+    TextField priceField = new TextField();
+    TextField commentField = new TextField();
+    TextField breedField = new TextField();
+    TextField breederField = new TextField();
 
 
     public void display() {
@@ -76,18 +88,21 @@ public class AddPetView {
         gridPane.add(new TextField(), 1, 8);
 
 
-        // Add TextFields
-        for (int i = 1; i < 7; i++) {
-            gridPane.add(new TextField(), 1, i);
-        }
+        gridPane.add(nameField, 1, 1);
+        gridPane.add(ageField, 1, 2);
+        gridPane.add(genderField, 1, 3);
+        gridPane.add(colorField, 1, 4);
+        gridPane.add(priceField, 1, 5);
+        gridPane.add(commentField, 1, 6);
+        gridPane.add(breedField, 1, 7);
+        gridPane.add(breederField,1,8);
+        // Add Button
+        // Add Button
 
-        // Add Button
-        // Add Button
-        Button saveButton = new Button("Save");
         saveButton.setMnemonicParsing(false);
         saveButton.setPrefSize(95.0, 25.0);
         gridPane.add(saveButton, 1, 9);
-        saveButton.setOnAction(event -> saveDog());
+        saveButton.setOnAction(listener);
 
         // Add GridPane to AnchorPane
         anchorPane.getChildren().add(gridPane);
@@ -99,7 +114,7 @@ public class AddPetView {
         stage.setScene(new Scene(anchorPane));
         stage.setResizable(true);
         stage.show();
-
+        saveButtonDog.setOnAction(listener);
         saveButton.setOnAction(event -> stage.close());
     }
 
@@ -111,6 +126,14 @@ public class AddPetView {
                 String selected = comboBox.getSelectionModel().getSelectedItem();
                 addAnimalSpecificFields(selected);
             }
+            if(event.getSource() == saveButtonDog){
+                saveDog();
+            }
+            if(event.getSource() == saveButtonCat){
+                saveDog();
+
+            }
+
         }
 
         private void addAnimalSpecificFields(String animalType) {
@@ -125,22 +148,22 @@ public class AddPetView {
                     gridPane.add(new TextField(), 1, 6);
                     gridPane.add(breeder, 0, 7);
                     gridPane.add(new TextField(), 1, 7);
-                    Button saveButtonDog = new Button("Save");
+
                     saveButtonDog.setMnemonicParsing(false);
                     saveButtonDog.setPrefSize(95.0, 25.0);
                     gridPane.add(saveButtonDog, 1, 8);
-                    saveButtonDog.setOnAction(event -> saveDog());
-                    saveButtonDog.setOnAction(event -> currentStage.close());
+                    saveButtonDog.setOnAction(listener);
                     break;
                 case "Cat":
                     gridPane.add(new Label("Breed"), 0, 6);
                     gridPane.add(new TextField(), 1, 6);
                     gridPane.add(new Label("Breeder"), 0, 7);
                     gridPane.add(new TextField(), 1, 7);
-                    Button saveButtonCat = new Button("Save");
+
                     saveButtonCat.setMnemonicParsing(false);
                     saveButtonCat.setPrefSize(95.0, 25.0);
                     gridPane.add(saveButtonCat, 1, 8);
+                    saveButtonCat.setOnAction(event -> saveDog());
                     break;
                 case "Bird":
                     gridPane.add(new Label("Prefered food"), 0, 6);
@@ -181,8 +204,8 @@ public class AddPetView {
     }
 
     public void saveDog() {
-        Dog dog = new Dog(name.getText(), Integer.parseInt(age.getText()), gender.getText(), color.getText(), comment.getText(), true, new Price(Integer.parseInt(price.getText())), breed.getText(), breeder.getText());
-        System.err.println( dog.toString() );
+        Price price1 = new Price(Integer.parseInt(priceField.getText()));
+        Dog dog = new Dog(nameField.getText(), Integer.parseInt(ageField.getText()) , genderField.getText(), colorField.getText(), commentField.getText(), true , price1 , breedField.getText(), breederField.getText());
         PetListModelManager petListModelManager = new PetListModelManager();
         petListModelManager.addPetForSale(dog);
     }

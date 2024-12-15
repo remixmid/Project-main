@@ -1,24 +1,35 @@
 package com.GUIMain;
 
+import Model.Dog;
 import Model.Pet;
 import Model.PetList;
+import Model.Price;
 import com.PetListModelManager;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class MainView extends Application {
 
     private PetListModelManager petListModelManager;
+    private ObservableList<Pet> listOfPets;
+
 
     @Override
     public void start(Stage primaryStage) {
         petListModelManager = new PetListModelManager();
-
+        listOfPets = FXCollections.observableArrayList(
+                new Dog("1",1,"1","1","1",true,new Price(1),"12","12")
+        );
+        PetList petList = petListModelManager.getAllPets();
+        for (Pet pet: petList.getAllPetsForSale()) {
+            listOfPets.add(pet);
+        }
         // Create TabPane
         TabPane tabPane = new TabPane();
         tabPane.setPrefSize(600, 400);
@@ -38,21 +49,19 @@ public class MainView extends Application {
         flowPane1.setMaxSize(590, 371);
         flowPane1.setMinSize(590, 371);
 
-        TableView<Object> tableView1 = new TableView<>();
+        TableView<Pet> tableView1 = new TableView<>();
+        tableView1.setItems(listOfPets);
         tableView1.setPrefSize(590, 338);
         tableView1.setMaxSize(590, 338);
         tableView1.setMinSize(590, 338);
-        tableView1.getColumns().add(new TableColumn<>("Name"));
-        tableView1.getColumns().add(new TableColumn<>("Age"));
-        tableView1.getColumns().add(new TableColumn<>("Gender"));
-        tableView1.getColumns().add(new TableColumn<>("Color"));
-        tableView1.getColumns().add(new TableColumn<>("Price"));
+        TableColumn<Pet, String> nameColumn = new TableColumn<>("Name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        ObservableList<Pet> listOfPets = FXCollections.observableArrayList();
-        PetList petList = petListModelManager.getAllPets();
-        for (Pet pet: petList.getAllPetsForSale()) {
-            listOfPets.add(pet);
-        }
+        TableColumn<Pet, Integer> ageColumn = new TableColumn<>("Age");
+        ageColumn.setCellValueFactory(new PropertyValueFactory<>("age"));
+        tableView1.getColumns().setAll(nameColumn,ageColumn);
+
+
 
         HBox hbox1 = new HBox(20);
         hbox1.setPrefSize(290, 32);

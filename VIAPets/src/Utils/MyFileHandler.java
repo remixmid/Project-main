@@ -88,7 +88,8 @@ public class MyFileHandler {
                 objects.add(in.readObject());
             }
             in.close();
-        } catch (EOFException e) {
+        } catch (EOFException e)
+            {
         }
         return objects.toArray();
     }
