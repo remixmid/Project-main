@@ -1,4 +1,4 @@
-package com.GUIMain;
+package savepackages.GUIMain;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -6,11 +6,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
-import java.time.LocalDate;
-
-public class AddBooking   {
+public class EditBooking   {
 
 
     public void display() {
@@ -50,11 +47,11 @@ public class AddBooking   {
         priceLabel.setPrefSize(45, 17);
         gridPane.add(priceLabel, 0, 1);
 
-        Label dateInLabel = new Label("Date Out");
+        Label dateInLabel = new Label("Date in");
         dateInLabel.setPrefSize(55, 17);
         gridPane.add(dateInLabel, 0, 4);
 
-        Label dateOutLabel = new Label("Date In");
+        Label dateOutLabel = new Label("Date out");
         dateOutLabel.setPrefSize(53, 17);
         gridPane.add(dateOutLabel, 0, 3);
 
@@ -90,6 +87,5 @@ public class AddBooking   {
         stage.setResizable(false);
         stage.showAndWait();
     }
-
 
 }

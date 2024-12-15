@@ -1,5 +1,6 @@
-package com.GUIMain;
+package savepackages.GUIMain;
 
+import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,7 +12,8 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class AddCustomerView {
+public class EditCustomerView  {
+
     public void display() {
         // Create AnchorPane
         AnchorPane anchorPane = new AnchorPane();
@@ -63,12 +65,14 @@ public class AddCustomerView {
         // Add GridPane to AnchorPane
         anchorPane.getChildren().add(gridPane);
 
-        // Create and Show Stage
+        // Set Scene
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Add Customer");
+        stage.setTitle("Edit Customer");
         stage.setScene(new Scene(anchorPane));
         stage.setResizable(false);
         stage.showAndWait();
     }
+
+
 }

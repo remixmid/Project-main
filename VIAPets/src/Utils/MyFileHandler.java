@@ -82,14 +82,14 @@ public class MyFileHandler {
 
     public static Object[] readArrayFromBinaryFile(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
         ArrayList<Object> objects = new ArrayList<>();
-        try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
-            while (in.available() > 0) {
-                objects.add(in.readObject());
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
+            while (true) {
+                try {
+                    objects.add(in.readObject());
+                } catch (EOFException e) {
+                    break;
+                }
             }
-            in.close();
-        } catch (EOFException e)
-            {
         }
         return objects.toArray();
     }

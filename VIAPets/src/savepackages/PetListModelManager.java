@@ -1,4 +1,4 @@
-package com;
+package savepackages;
 
 import Model.Pet;
 import Model.PetList;
@@ -10,9 +10,9 @@ public class PetListModelManager {
     private String fileName;
 
     public PetListModelManager() {
-        fileName = "Pets.bin";
+        this.fileName = "Pets.bin";
         try {
-            File file = new File(fileName);
+            File file = new File(this.fileName);
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -25,7 +25,7 @@ public class PetListModelManager {
         PetList petList = new PetList();
 
         try {
-            Object[] objects = MyFileHandler.readArrayFromBinaryFile(fileName);
+            Object[] objects = MyFileHandler.readArrayFromBinaryFile(this.fileName);
 
             for (Object obj : objects) {
                 petList.addPet((Pet) obj);
@@ -38,21 +38,17 @@ public class PetListModelManager {
 
     public void addPetForSale(Pet pet) {
         try {
-            PetList petList = new PetList();
-            Object[] objects = MyFileHandler.readArrayFromBinaryFile(fileName);
-            for (Object obj : objects) {
-                petList.addPet((Pet) obj);
-            }
+            PetList petList = getAllPets();
             petList.addPet(pet);
             savePetsForSale(petList);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();    
         }
     }
 
     public void savePetsForSale(PetList petList) {
         try {
-            MyFileHandler.writeArrayToBinaryFile(fileName, petList.getAllPetsForSale().toArray());
+            MyFileHandler.writeArrayToBinaryFile(this.fileName, petList.getAllPetsForSale().toArray());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,7 +56,7 @@ public class PetListModelManager {
 
     public void editPet(Pet petToChange, Pet newPet) {
         try {
-            Object[] objects = MyFileHandler.readArrayFromBinaryFile(fileName);
+            Object[] objects = MyFileHandler.readArrayFromBinaryFile(this.fileName);
             PetList petList = new PetList();
             for (Object obj : objects) {
                 Pet pet = (Pet) obj;
@@ -78,7 +74,7 @@ public class PetListModelManager {
 
     public void deletePet(Pet petToDelete) {
         try {
-            Object[] objects = MyFileHandler.readArrayFromBinaryFile(fileName);
+            Object[] objects = MyFileHandler.readArrayFromBinaryFile(this.fileName);
             PetList petList = new PetList();
             for (Object obj : objects) {
                 Pet pet = (Pet) obj;

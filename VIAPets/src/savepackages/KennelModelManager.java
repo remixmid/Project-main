@@ -1,4 +1,4 @@
-package com;
+package savepackages;
 
 import Model.Kennel;
 import Model.KennelPlace;
@@ -19,7 +19,7 @@ public class KennelModelManager {
     public Kennel getKennel() {
         List<Object> kennelArr = new ArrayList<>();
         try {
-            kennelArr = Stream.of(MyFileHandler.readArrayFromBinaryFile(fileName)).toList();
+            kennelArr = Stream.of(MyFileHandler.readArrayFromBinaryFile(this.fileName)).toList();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,7 +46,7 @@ public class KennelModelManager {
 
     public void saveKennel(Kennel kennel) {
         try {
-            MyFileHandler.writeArrayToBinaryFile(fileName, kennel.getAllKennelPlaces());
+            MyFileHandler.writeArrayToBinaryFile(this.fileName, kennel.getAllKennelPlaces());
         } catch (Exception e) {
             e.printStackTrace();
         }

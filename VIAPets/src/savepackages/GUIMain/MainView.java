@@ -1,7 +1,12 @@
-package com.GUIMain;
+package savepackages.GUIMain;
 
-import Model.*;
-import com.PetListModelManager;
+import Model.Dog;
+import Model.Pet;
+import Model.PetList;
+import Model.Price;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import savepackages.PetListModelManager;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,19 +19,18 @@ import javafx.stage.Stage;
 public class MainView extends Application {
 
     private PetListModelManager petListModelManager;
-    private ObservableList<Pet> petObservableList;
-    private ObservableList<Customer> customersObservableList;
+    private ObservableList<Pet> listOfPets;
 
 
     @Override
     public void start(Stage primaryStage) {
         petListModelManager = new PetListModelManager();
-        petObservableList = FXCollections.observableArrayList(
+        listOfPets = FXCollections.observableArrayList(
                 new Dog("1",1,"1","1","1",true,new Price(1),"12","12")
         );
         PetList petList = petListModelManager.getAllPets();
         for (Pet pet: petList.getAllPetsForSale()) {
-            petObservableList.add(pet);
+            listOfPets.add(pet);
         }
         // Create TabPane
         TabPane tabPane = new TabPane();
@@ -48,21 +52,16 @@ public class MainView extends Application {
         flowPane1.setMinSize(590, 371);
 
         TableView<Pet> tableView1 = new TableView<>();
-        tableView1.setItems(petObservableList);
+        tableView1.setItems(listOfPets);
         tableView1.setPrefSize(590, 338);
         tableView1.setMaxSize(590, 338);
         tableView1.setMinSize(590, 338);
         TableColumn<Pet, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
         TableColumn<Pet, Integer> ageColumn = new TableColumn<>("Age");
         ageColumn.setCellValueFactory(new PropertyValueFactory<>("age"));
-        TableColumn<Pet,String> genderColumn = new TableColumn<>("Gender");
-        genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
-        TableColumn<Pet,String> colorColumn = new TableColumn<>("Color");
-        colorColumn.setCellValueFactory(new PropertyValueFactory<>("color"));
-        TableColumn<Pet,String> comentColumn = new TableColumn<>("Comment");
-        comentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
-        tableView1.getColumns().setAll(nameColumn,ageColumn,genderColumn,colorColumn,comentColumn);
+        tableView1.getColumns().setAll(nameColumn,ageColumn);
 
 
 
@@ -140,20 +139,14 @@ public class MainView extends Application {
         flowPane3.setMaxSize(604, 364);
         flowPane3.setMinSize(604, 364);
 
-        TableView<Customer> tableView3 = new TableView<>();
+        TableView<Object> tableView3 = new TableView<>();
         tableView3.setPrefSize(601, 308);
         tableView3.setMaxSize(601, 308);
         tableView3.setMinSize(601, 308);
-        TableColumn<Customer, Integer> nameCustomerColumn = new TableColumn<>("Name");
-        nameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<Customer,String> phoneNumberColumn = new TableColumn<>("Phone Number");
-        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        TableColumn<Customer,String> emailColumn = new TableColumn<>("Email");
-        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        TableColumn<Customer,String> addressColumn = new TableColumn<>("Address");
-        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
-        tableView3.getColumns().setAll(nameCustomerColumn,phoneNumberColumn,emailColumn,addressColumn);
-
+        tableView3.getColumns().add(new TableColumn<>("Name"));
+        tableView3.getColumns().add(new TableColumn<>("Phone Number"));
+        tableView3.getColumns().add(new TableColumn<>("Email"));
+        tableView3.getColumns().add(new TableColumn<>("Address"));
 
         HBox hbox3 = new HBox(20);
         hbox3.setPrefSize(221, 65);
@@ -207,6 +200,22 @@ public class MainView extends Application {
     private void openEditBooking(){
         EditBooking editBooking = new EditBooking();
         editBooking.display();
+    }
+
+
+    private class MyTabListener implements ChangeListener<Tab>
+    {
+        public void changed(ObservableValue<? extends Tab> tab, Tab oldTab, Tab newTab)
+        {
+            if (newTab == tab1)
+            {
+                updateStudentArea();
+            }
+            else if (newTab == changeCountryTab)
+            {
+                updateStudentBox();
+            }
+        }
     }
 
 
