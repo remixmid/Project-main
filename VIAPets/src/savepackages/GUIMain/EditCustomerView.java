@@ -1,5 +1,6 @@
 package savepackages.GUIMain;
 
+import Model.Customer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,7 +29,12 @@ public class EditCustomerView  {
     private TextField phoneField;
     private TextField addressField;
     private Button saveButton;
-    private Stage stage;
+    public Stage stage;
+    private Customer customer;
+
+    public EditCustomerView(Customer customer) {
+        this.customer = customer;
+    }
 
     public void display() {
         // Create AnchorPane

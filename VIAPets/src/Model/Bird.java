@@ -2,15 +2,21 @@ package Model;
 
 public class Bird extends Pet {
     private String preferredFood;
+    private String type;
 
     public Bird(String name, int age, String gender, String color, String comment, boolean isForSale, Price price, String preferredFood) {
         super(name, age, gender, color, comment, isForSale, price);
         this.preferredFood = preferredFood;
+        this.type = this.getClass().getSimpleName();
     }
 
     public Bird(String name, int age, String gender, String color, String comment, boolean isForSale, String preferredFood) {
         super(name, age, gender, color, comment, isForSale);
         this.preferredFood = preferredFood;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getPreferredFood() {

@@ -3,7 +3,11 @@ package savepackages.GUIMain;
 import Model.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
+import savepackages.BookingListModelManager;
+import savepackages.CustomerListModelManager;
 import savepackages.PetListModelManager;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -14,10 +18,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 public class MainView extends Application {
 
     private PetListModelManager petListModelManager;
     private ObservableList<Pet> listOfPets;
+    private ObservableList<Customer> listOfCustomers;
+    private BookingListModelManager bookingListModelManager;
+    private ObservableList<KennelPlace> listOfBookings;
     private TabPane tabPane;
     private Tab tab1;
     private VBox tab1Content;
@@ -25,6 +35,28 @@ public class MainView extends Application {
     private TableView<Pet> tableView1;
     private TableColumn<Pet, String> nameColumn;
     private TableColumn<Pet, Integer> ageColumn;
+    private TableColumn<Pet, String> genderColumn;
+    private TableColumn<Pet, String> colorColumn;
+    private TableColumn<Pet, String> commentColumn;
+    private TableColumn<Pet, Price> priceColumn;
+    private TableColumn<Pet, String> breedColumn;
+    private TableColumn<Pet, String> breederColumn;
+    private TableColumn<Pet, String> bitingTendencyColumn;
+    private TableColumn<Pet, String> waterTypeColumn;
+    private TableColumn<Pet, String> predatorStatusColumn;
+    private TableColumn<Pet, String> preferedFoodColumn;
+    private TableColumn<Pet, String> typeColumn;
+    private TableColumn<KennelPlace, Date> dateInColumn;
+    private TableColumn<KennelPlace, Date> dateOutColumn;
+    private TableColumn<KennelPlace, Integer> kennelPlaceIdColumn;
+    private TableColumn<KennelPlace , Pet> kennelHasThisPetColumn;
+    private TableColumn<KennelPlace , Price> kennelPriceColumn;
+    private TableColumn<KennelPlace, Integer> kennelPlaceIdColumn2;
+    private TableColumn<KennelPlace , Boolean> kennelIsOccupied;
+    private TableColumn<Customer, String> customerNameColumn;
+    private TableColumn<Customer, String> customerPhoneNumberColumn;
+    private TableColumn<Customer, String> customerAddressColumn;
+    private TableColumn<Customer, String> customerEmailColumn;
     private HBox hbox1;
     private Button addPetButton;
     private Button editPetButton;
@@ -32,29 +64,9 @@ public class MainView extends Application {
     private Tab tab2;
     private AnchorPane anchorPane2;
     private HBox hBox2;
-    private GridPane gridPane;
-    private Label label1 = new Label("Room 1");
-    private Label label2 = new Label("Room 2");
-    private Label label3 = new Label("Room 3");
-    private Label label4 = new Label("Room 4");
-    private Label label5 = new Label("Room 5");
-    private Label label6 = new Label("Room 6");
-    private Label label7 = new Label("Room 7");
-    private Label label8 = new Label("Room 8");
-    private Label label9 = new Label("Room 9");
-    private Label label10 = new Label("Room 10");
-    private TextField roomfield1 = new TextField();
-    private TextField roomfield2 = new TextField();
-    private TextField roomfield3 = new TextField();
-    private TextField roomfield4 = new TextField();
-    private TextField roomfield5 = new TextField();
-    private TextField roomfield6 = new TextField();
-    private TextField roomfield7 = new TextField();
-    private TextField roomfield8 = new TextField();
-    private TextField roomfield9 = new TextField();
-    private TextField roomfield10 = new TextField();
     private VBox vBox2;
     private TableView tableView2;
+    private TableView tableView4;
     private AnchorPane anchorPane3;
     private Button addBookingButton;
     private Scene scene;
@@ -68,47 +80,84 @@ public class MainView extends Application {
     private HBox hbox3;
     private Button addCustomerButton;
     private Button editCustomerButton;
+    private PetList petList;
+    private BookingList bookingList;
+    private CustomerList customerList;
+    private CustomerListModelManager customerListModelManager;
+    private VBox vBox3;
 
     @Override
     public void start(Stage primaryStage) {
         petListModelManager = new PetListModelManager();
-        listOfPets = FXCollections.observableArrayList(
-                new Dog("1",1,"1","1","1",true,new Price(1),"12","12")
-        );
-        PetList petList = petListModelManager.getAllPets();
+        listOfPets = FXCollections.observableArrayList();
+        listOfCustomers = FXCollections.observableArrayList();
+        bookingListModelManager = new BookingListModelManager();
+        listOfBookings = FXCollections.observableArrayList();
+
+        tabPane = new TabPane();
+        tabPane.setPrefSize(1000, 400);
+        tabPane.setMaxSize(1000, 400);
+        tabPane.setMinSize(1000, 400);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        bookingList = bookingListModelManager.getAllBookings();
+        for (KennelPlace kennelPlace : bookingList.getBookingList()) {
+            listOfBookings.add(kennelPlace);
+        }
+
+        petList = petListModelManager.getAllPets();
         for (Pet pet: petList.getAllPetsForSale()) {
             listOfPets.add(pet);
         }
-        // Create TabPane
-        tabPane = new TabPane();
-        tabPane.setPrefSize(600, 400);
-        tabPane.setMaxSize(600, 400);
-        tabPane.setMinSize(600, 400);
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         // Tab 1
         tab1 = new Tab("Shop");
         tab1Content = new VBox();
-        tab1Content.setPrefSize(590, 390);
-        tab1Content.setMaxSize(590, 390);
-        tab1Content.setMinSize(590, 390);
+        tab1Content.setPrefSize(990, 390);
+        tab1Content.setMaxSize(990, 390);
+        tab1Content.setMinSize(990, 390);
 
         flowPane1 = new FlowPane();
-        flowPane1.setPrefSize(590, 371);
-        flowPane1.setMaxSize(590, 371);
-        flowPane1.setMinSize(590, 371);
+        flowPane1.setPrefSize(990, 371);
+        flowPane1.setMaxSize(990, 371);
+        flowPane1.setMinSize(990, 371);
 
         tableView1 = new TableView<>();
         tableView1.setItems(listOfPets);
-        tableView1.setPrefSize(590, 338);
-        tableView1.setMaxSize(590, 338);
-        tableView1.setMinSize(590, 338);
+        tableView1.setPrefSize(990, 338);
+        tableView1.setMaxSize(990, 338);
+        tableView1.setMinSize(990, 338);
         nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         ageColumn = new TableColumn<>("Age");
         ageColumn.setCellValueFactory(new PropertyValueFactory<>("age"));
-        tableView1.getColumns().setAll(nameColumn,ageColumn);
+
+        genderColumn = new TableColumn<>("Gender");
+        genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        colorColumn = new TableColumn<>("Color");
+        colorColumn.setCellValueFactory(new PropertyValueFactory<>("color"));
+        commentColumn = new TableColumn<>("Comment");
+        commentColumn.setCellValueFactory(new PropertyValueFactory<>("comment"));
+        priceColumn = new TableColumn<>("Price");
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        breederColumn = new TableColumn<>("Breeder");
+        breederColumn.setCellValueFactory(new PropertyValueFactory<>("breeder"));
+        breedColumn = new TableColumn<>("Breeder");
+        breedColumn.setCellValueFactory(new PropertyValueFactory<>("breeder"));
+        bitingTendencyColumn = new TableColumn<>("Biting Tendency");
+        waterTypeColumn = new TableColumn<>("Water Type");
+        predatorStatusColumn = new TableColumn<>("Predator Status");
+        preferedFoodColumn = new TableColumn<>("Prefered Food");
+        typeColumn = new TableColumn<>("Type");
+        waterTypeColumn.setCellValueFactory(new PropertyValueFactory<>("waterType"));
+        predatorStatusColumn.setCellValueFactory(new PropertyValueFactory<>("predatorStatus"));
+        preferedFoodColumn.setCellValueFactory(new PropertyValueFactory<>("preferedFood"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        bitingTendencyColumn.setCellValueFactory(new PropertyValueFactory<>("bitingTendency"));
+
+        tableView1.getColumns().setAll(typeColumn,nameColumn, ageColumn,genderColumn,colorColumn,commentColumn,priceColumn,breederColumn,breedColumn,bitingTendencyColumn,waterTypeColumn,predatorStatusColumn,preferedFoodColumn);
+
 
 
 
@@ -120,57 +169,49 @@ public class MainView extends Application {
         addPetButton = new Button("Add Pet");
         editPetButton = new Button("Edit Pet");
         deletePetButton = new Button("Delete Pet");
+        deletePetButton.setOnAction(event -> {
+            Pet selectedPet = tableView1.getSelectionModel().getSelectedItem();
+            if (selectedPet != null) {
+                petListModelManager.deletePet(selectedPet);
+                refreshPetList();
+            } else {
+                // Optional: Show an alert if no pet is selected
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("No Pet Selected");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select a pet to delete.");
+                alert.showAndWait();
+            }
+        });
+        editPetButton.setOnAction(e -> openEditPetView());
+
+
         hbox1.getChildren().addAll(addPetButton, editPetButton, deletePetButton);
 
         flowPane1.getChildren().addAll(tableView1, hbox1, new StackPane());
         tab1Content.getChildren().add(flowPane1);
         tab1.setContent(tab1Content);
         addPetButton.setOnAction(e -> openAddPetView());
-        editPetButton.setOnAction(e -> openEditPetView());
 
         // Tab 2
         tab2 = new Tab("Kennel");
         anchorPane2 = new AnchorPane();
         hBox2 = new HBox(20);
-        hBox2.setPrefSize(600, 374);
-        gridPane = new GridPane();
-        gridPane.setPrefSize(855, 271);
-        for (int i = 0; i < 2; i++) {
-            gridPane.getColumnConstraints().add(new ColumnConstraints(48));
-        }
-        for (int i = 0; i < 10; i++) {
-            gridPane.getRowConstraints().add(new RowConstraints(30));
-        }
-        gridPane.add(label1,0,0);
-        gridPane.add(roomfield1,1,0);
-        gridPane.add(label2,0,1);
-        gridPane.add(roomfield2,1,1);
-        gridPane.add(label3,0,2);
-        gridPane.add(roomfield3,1,2);
-        gridPane.add(label4,0,3);
-        gridPane.add(roomfield4,1,3);
-        gridPane.add(label5,0,4);
-        gridPane.add(roomfield5,1,4);
-        gridPane.add(label6,0,5);
-        gridPane.add(roomfield6,1,5);
-        gridPane.add(label7,0,6);
-        gridPane.add(roomfield7,1,6);
-        gridPane.add(label8,0,7);
-        gridPane.add(roomfield8,1,7);
-        gridPane.add(label9,0,8);
-        gridPane.add(roomfield9,1,8);
-        gridPane.add(label10,0,9);
-        gridPane.add(roomfield10,1,9);
-        
+        hBox2.setPrefSize(900, 374);
+
+
+
+
+
 
         vBox2 = new VBox();
         vBox2.setPrefSize(391, 374);
+        vBox3 = new VBox();
+        vBox3.setPrefSize(391, 374);
         tableView2 = new TableView();
         tableView2.setPrefSize(391, 327);
-        tableView2.getColumns().add(new TableColumn<>("Customer"));
-        tableView2.getColumns().add(new TableColumn<>("Pet"));
-        tableView2.getColumns().add(new TableColumn<>("Date In"));
-        tableView2.getColumns().add(new TableColumn<>("Date Out"));
+        tableView4 = new TableView();
+        tableView4.setPrefSize(391, 311);
         anchorPane3 = new AnchorPane();
         anchorPane3.setPrefSize(391, 79);
         addBookingButton = new Button("Add Booking");
@@ -186,11 +227,30 @@ public class MainView extends Application {
         addKenelPlaceButton.setLayoutY(13);
         anchorPane3.getChildren().addAll(addBookingButton, editBookingButton, deleteBookingButton, addKenelPlaceButton);
         vBox2.getChildren().addAll(tableView2, anchorPane3);
-        hBox2.getChildren().addAll(gridPane, vBox2);
+        vBox3.getChildren().addAll(tableView4);
+        hBox2.getChildren().addAll(vBox3,vBox2);
         anchorPane2.getChildren().add(hBox2);
         tab2.setContent(anchorPane2);
         addBookingButton.setOnAction(e -> openAddBookView());
         editBookingButton.setOnAction(e -> openEditBooking());
+        kennelPlaceIdColumn2 = new TableColumn<>("Id");
+        kennelPlaceIdColumn2.setCellValueFactory(new PropertyValueFactory<>("kennelPlaceId"));
+        kennelIsOccupied = new TableColumn<>("Is occupied");
+        kennelIsOccupied.setCellValueFactory(new PropertyValueFactory<>("isOccupied"));
+        kennelPlaceIdColumn = new TableColumn<>("Id");
+        kennelPlaceIdColumn.setCellValueFactory(new PropertyValueFactory<>("kennelPlaceId"));
+        tableView4.getColumns().addAll(kennelPlaceIdColumn2, kennelIsOccupied);
+
+        dateInColumn = new TableColumn<>("Date in ");
+        dateInColumn.setCellValueFactory(new PropertyValueFactory<>("dateIn"));
+        dateOutColumn = new TableColumn<>("Date out ");
+        dateOutColumn.setCellValueFactory(new PropertyValueFactory<>("dateOut"));
+        kennelPriceColumn = new TableColumn<>("Price");
+        kennelPriceColumn.setCellValueFactory(new PropertyValueFactory<>("kennelPrice"));
+        kennelHasThisPetColumn = new TableColumn<>("Pet");
+        kennelHasThisPetColumn.setPrefWidth(94);
+        kennelHasThisPetColumn.setCellValueFactory(new PropertyValueFactory<>("pet"));
+        tableView2.getColumns().addAll(kennelPlaceIdColumn,dateInColumn,dateOutColumn,kennelPriceColumn,kennelHasThisPetColumn);
 
         // Tab 3
         tab3 = new Tab("Customers");
@@ -208,10 +268,16 @@ public class MainView extends Application {
         tableView3.setPrefSize(601, 308);
         tableView3.setMaxSize(601, 308);
         tableView3.setMinSize(601, 308);
-        tableView3.getColumns().add(new TableColumn<>("Name"));
-        tableView3.getColumns().add(new TableColumn<>("Phone Number"));
-        tableView3.getColumns().add(new TableColumn<>("Email"));
-        tableView3.getColumns().add(new TableColumn<>("Address"));
+
+        customerNameColumn = new TableColumn<>("Name");
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        customerPhoneNumberColumn = new TableColumn<>("Phone Number");
+        customerPhoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        customerEmailColumn = new TableColumn<>("Email");
+        customerEmailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        customerAddressColumn = new TableColumn<>("Address");
+        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tableView3.getColumns().setAll(customerNameColumn,customerPhoneNumberColumn,customerEmailColumn,customerAddressColumn);
 
         hbox3 = new HBox(20);
         hbox3.setPrefSize(221, 65);
@@ -242,46 +308,76 @@ public class MainView extends Application {
     private void openAddCustomerWindow() {
         AddCustomerView addCustomerView = new AddCustomerView();
         addCustomerView.display(); // Display the Add Customer View
+        addCustomerView.stage.setOnHidden(event -> {refreshCustomerList();});
     }
     private void openEditCustomerWindow() {
-        EditCustomerView editCustomerView = new EditCustomerView();
-        editCustomerView.display();
+        Customer selectedCustomer = tableView3.getSelectionModel().getSelectedItem();
+        if (selectedCustomer != null) {
+            EditCustomerView editCustomerView = new EditCustomerView(selectedCustomer);
+            editCustomerView.display();
+            editCustomerView.stage.setOnHidden(event -> {refreshCustomerList();});// Обновите список после редактирования
+        } else {
+            // Показать предупреждение, если животное не выбрано
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Не выбрано");
+            alert.setHeaderText("Животное не выбрано");
+            alert.setContentText("Пожалуйста, выберите животное для редактирования.");
+            alert.showAndWait();
+        }
+        refreshPetList();
     }
     private void openAddPetView(){
         AddPetView addPetView = new AddPetView();
         addPetView.display();
-
-    }
-
-    private void openEditPetView(){
-        EditPetView editPetView = new EditPetView();
-        editPetView.display();
+        addPetView.stage.setOnHidden(event -> {refreshPetList();});
     }
 
     private void openAddBookView(){
         AddBooking addBooking = new AddBooking();
         addBooking.display();
+        addBooking.stage.setOnHidden(event -> {refreshBookingList();});
     }
     private void openEditBooking(){
         EditBooking editBooking = new EditBooking();
         editBooking.display();
     }
 
+    private void refreshBookingList(){
 
- //   private class MyTabListener implements ChangeListener<Tab>
-  //  {
-   //     public void changed(ObservableValue<? extends Tab> tab, Tab oldTab, Tab newTab)
-   //     {
-   //         if (newTab == tab1)
-    //        {
-    //            updateStudentArea();
-    //        }
-    //        else if (newTab == changeCountryTab)
-    //        {
-   //             updateStudentBox();
-   //         }
-  //      }
-  //  }
+    }
+
+    private void refreshPetList() {
+        listOfPets.clear();
+        PetList petList = petListModelManager.getAllPets();
+        listOfPets.addAll(petList.getAllPetsForSale());
+        tableView1.setItems(listOfPets);
+        tableView1.refresh();
+    }
+
+    private void refreshCustomerList(){
+        listOfCustomers.clear();
+        CustomerList customerList = customerListModelManager.getAllCustomers();
+        listOfCustomers.addAll(customerList.getAllCustomers());
+        tableView3.refresh();
+    }
+
+    private void openEditPetView() {
+        Pet selectedPet = tableView1.getSelectionModel().getSelectedItem();
+        if (selectedPet != null) {
+            EditPetView editPetView = new EditPetView(selectedPet);
+            editPetView.display();
+            editPetView.stage.setOnHidden(event -> {refreshPetList();});// Обновите список после редактирования
+        } else {
+            // Показать предупреждение, если животное не выбрано
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Не выбрано");
+            alert.setHeaderText("Животное не выбрано");
+            alert.setContentText("Пожалуйста, выберите животное для редактирования.");
+            alert.showAndWait();
+        }
+        refreshPetList();
+    }
+
 
 
     public static void main(String[] args) {

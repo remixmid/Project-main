@@ -7,7 +7,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class EditBooking   {
+public class EditBooking {
 
 
     private AnchorPane anchorPane;
@@ -88,7 +88,7 @@ public class EditBooking   {
         customerLabel = new Label("Customer");
         customerLabel.setPrefSize(70, 17);
         gridPane.add(customerLabel, 0, 2);
-        
+
         customerField = new TextField();
         gridPane.add(customerField, 1, 2);
 

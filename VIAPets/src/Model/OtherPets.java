@@ -35,4 +35,11 @@ public class OtherPets extends Pet{
         return false;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
 }

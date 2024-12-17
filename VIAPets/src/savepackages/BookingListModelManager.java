@@ -4,11 +4,21 @@ import Model.BookingList;
 import Model.KennelPlace;
 import Utils.MyFileHandler;
 
+import java.io.File;
+
 public class BookingListModelManager {
     private String fileName;
 
     public BookingListModelManager() {
-        fileName = "bookings.bin";
+        this.fileName = "Bookings.bin";
+        try {
+            File file = new File(this.fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public BookingList getAllBookings() {

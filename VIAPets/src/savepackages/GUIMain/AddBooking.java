@@ -17,7 +17,7 @@ public class AddBooking   {
     private GridPane gridPane;
     private ColumnConstraints col1;
     private ColumnConstraints col2;
-    private Stage stage;
+    public Stage stage;
     private Label petLabel;
     private Label priceLabel;
     private Label dateInLabel;

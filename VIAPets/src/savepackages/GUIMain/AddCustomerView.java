@@ -25,7 +25,7 @@ public class AddCustomerView {
     private TextField emailField;
     private TextField phoneField;
     private Button saveButton;
-    private Stage stage;
+    public Stage stage;
     private RowConstraints row;
 
     public void display() {

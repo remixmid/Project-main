@@ -3,17 +3,23 @@ package Model;
 public class Cat extends Pet {
     private  String Breed;
     private String Breeder;
+    private String type;
 
     public Cat(String name, int age, String gender, String color, String comment, boolean isForSale, Price price, String breed, String breeder) {
         super(name, age, gender, color, comment, isForSale, price);
         Breed = breed;
         Breeder = breeder;
+        this.type = this.getClass().getSimpleName();
     }
 
     public Cat(String name, int age, String gender, String color, String comment, boolean isForSale, String breed, String breeder) {
         super(name, age, gender, color, comment, isForSale);
         Breed = breed;
         Breeder = breeder;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getBreed() {
@@ -41,4 +47,11 @@ public class Cat extends Pet {
         return false;
     }
 
+    public void setBreed(String breed) {
+        Breed = breed;
+    }
+
+    public void setBreeder(String breeder) {
+        Breeder = breeder;
+    }
 }

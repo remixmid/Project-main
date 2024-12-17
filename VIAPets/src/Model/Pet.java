@@ -1,6 +1,7 @@
 package Model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public abstract class Pet implements Serializable {
     private String name;
@@ -79,20 +80,37 @@ public abstract class Pet implements Serializable {
         this.price = price;
     }
 
+    @Override
     public String toString() {
-        return "name: " + getName() + "price: " + price.toString();
+        return "Dog name: " + getName() + ", age: " + getAge() + ", price: " + price.getPrice() +
+                ", color: " + getColor() + ", gender: " + getGender();
     }
 
+    @Override
     public boolean equals(Object object) {
-        if (object == null || getClass() != object.getClass()) {
-            return false;
-        }
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
         Pet pet = (Pet) object;
-        if (getName().equals(pet.getName()) && getAge() == pet.getAge() &&
-        getColor().equals(pet.getColor()) && getGender().equals(pet.getGender()) &&
-        getComment().equals(pet.getComment()) && getPrice().equals(pet.getPrice()) && isForSale == pet.isForSale) {
-            return true;
-        }
-        return false;
+
+        return Objects.equals(name, pet.name) &&
+                age == pet.age &&
+                Objects.equals(color, pet.color) &&
+                Objects.equals(gender, pet.gender) &&
+                Objects.equals(comment, pet.comment) &&
+                price.getPrice() == pet.price.getPrice();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age, color, gender, comment, price.getPrice());
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

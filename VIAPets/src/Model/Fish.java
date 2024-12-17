@@ -3,11 +3,17 @@ package Model;
 public class Fish extends Pet {
     private String waterType;
     private String predatorStatus;
+    private String type;
 
     public Fish(String name, int age, String gender, String color, String comment, boolean isForSale, Price price, String waterType, String predatorStatus) {
         super(name, age, gender, color, comment, isForSale, price);
         this.waterType = waterType;
         this.predatorStatus = predatorStatus;
+        this.type = this.getClass().getSimpleName();
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getWaterType() {
@@ -35,4 +41,11 @@ public class Fish extends Pet {
         return false;
     }
 
+    public void setWaterType(String waterType) {
+        this.waterType = waterType;
+    }
+
+    public void setPredatorStatus(String predatorStatus) {
+        this.predatorStatus = predatorStatus;
+    }
 }

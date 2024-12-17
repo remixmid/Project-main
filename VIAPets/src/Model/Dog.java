@@ -3,18 +3,24 @@ package Model;
 public class Dog extends Pet {
     private String breed;
     private String breeder;
+    private String type;
 
     public Dog(String name, int age, String gender, String color, String comment,
                boolean isForSale, Price price, String breed, String breeder) {
         super(name, age, gender, color, comment, isForSale, price);
         this.breed = breed;
         this.breeder = breeder;
+        this.type = this.getClass().getSimpleName();
     }
 
     public Dog(String name, int age, String gender, String color, String comment, boolean isForSale, String breed, String breeder) {
         super(name, age, gender, color, comment, isForSale);
         this.breed = breed;
         this.breeder = breeder;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getBreed() {
@@ -42,4 +48,11 @@ public class Dog extends Pet {
         return false;
     }
 
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+
+    public void setBreeder(String breeder) {
+        this.breeder = breeder;
+    }
 }

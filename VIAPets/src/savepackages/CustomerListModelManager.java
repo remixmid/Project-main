@@ -1,6 +1,7 @@
 package savepackages;
 
 import Model.Customer;
+import Model.CustomerList;
 import Model.PetList;
 import Utils.MyFileHandler;
 
@@ -11,8 +12,8 @@ public class CustomerListModelManager {
         this.fileName = "Customers.bin";
     }
 
-    public PetList.CustomerList getAllCustomers() {
-        PetList.CustomerList customerList = new PetList.CustomerList();
+    public CustomerList getAllCustomers() {
+        CustomerList customerList = new CustomerList();
         try {
             Object[] objects = MyFileHandler.readArrayFromBinaryFile(fileName);
             for (Object object : objects) {
@@ -25,7 +26,7 @@ public class CustomerListModelManager {
         return customerList;
     }
 
-    public void saveCustomerList(PetList.CustomerList customerList) {
+    public void saveCustomerList(CustomerList customerList) {
         try {
             MyFileHandler.writeArrayToBinaryFile(fileName, customerList.getAllCustomers().toArray());
         } catch (Exception e) {
@@ -35,7 +36,7 @@ public class CustomerListModelManager {
 
     public void addCustomer(Customer customer) {
         try {
-            PetList.CustomerList customerList = getAllCustomers();
+            CustomerList customerList = getAllCustomers();
             for (Customer c : customerList.getAllCustomers()) {
                 if (c.equals(customer)) {
                     return;
@@ -50,7 +51,7 @@ public class CustomerListModelManager {
 
     public void editCustomer(Customer customerToEdit, Customer editedCustomer) {
         try {
-            PetList.CustomerList customerList = getAllCustomers();
+            CustomerList customerList = getAllCustomers();
             for (Customer customer : customerList.getAllCustomers()) {
                 if (customer.equals(customerToEdit)) {
                     customer = editedCustomer;

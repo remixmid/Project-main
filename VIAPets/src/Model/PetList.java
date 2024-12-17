@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PetList {
     private ArrayList<Pet> pets;
@@ -13,8 +14,34 @@ public class PetList {
         pets.add(pet);
     }
 
-    public void removePet(Pet pet) {
-        pets.remove(pet);
+    public void removePet(Pet petToRemove) {
+        pets.removeIf(pet ->
+                pet.getName().equals(petToRemove.getName()) &&
+                        pet.getAge() == petToRemove.getAge() &&
+                        pet.getColor().equals(petToRemove.getColor()) &&
+                        pet.getGender().equals(petToRemove.getGender()) &&
+                        pet.getPrice().getPrice() == petToRemove.getPrice().getPrice()
+        );
+    }
+
+    public void editPet(Pet petToEdit, int age, String comment, String gender, Price price) {
+        pets.removeIf(pet ->
+                pet.getName().equals(petToEdit.getName()) &&
+                        pet.getAge() == petToEdit.getAge() &&
+                        pet.getColor().equals(petToEdit.getColor()) &&
+                        pet.getGender().equals(petToEdit.getGender()) &&
+                        pet.getPrice().getPrice() == petToEdit.getPrice().getPrice()
+        );
+        Pet pet = petToEdit;
+        pet.setAge(age);
+        pet.setGender(gender);
+        pet.setPrice(price);
+        pet.setComment(comment);
+        pets.add(pet);
+    }
+
+    public void setPets(ArrayList<Pet> pets) {
+        this.pets = pets;
     }
 
     public ArrayList<Pet> getAllKennelPets() {
@@ -52,40 +79,5 @@ public class PetList {
             stringBuilder.append(pet.toString() + "\n");
         }
         return stringBuilder.toString();
-    }
-
-    public static class CustomerList {
-        private ArrayList<Customer> customerList = new ArrayList<>();
-
-        public CustomerList() {
-            customerList = new ArrayList<>();
-        }
-
-        public void addCustomer(Customer customer) {
-            customerList.add(customer);
-        }
-
-        public ArrayList<Customer> getAllCustomers() {
-            return customerList;
-        }
-
-        public String kennelPetsToString() {
-            ArrayList<Customer> customers = getAllCustomers();
-            StringBuilder stringBuilder = new StringBuilder();
-            for (Customer customer : customers) {
-                stringBuilder.append(customer.toString() + "\n");
-            }
-            return stringBuilder.toString();
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (Customer customer : customerList) {
-                stringBuilder.append(customer.toString());
-                stringBuilder.append("\n");
-            }
-            return stringBuilder.toString();
-        }
     }
 }
