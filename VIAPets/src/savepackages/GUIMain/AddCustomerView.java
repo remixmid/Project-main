@@ -1,5 +1,8 @@
 package savepackages.GUIMain;
 
+import Model.Customer;
+import Model.Price;
+import Model.Rodent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,6 +13,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import savepackages.CustomerListModelManager;
+import savepackages.PetListModelManager;
 
 public class AddCustomerView {
     private ColumnConstraints column2;
@@ -85,6 +90,7 @@ public class AddCustomerView {
         saveButton.setPrefSize(95.0, 25.0);
         gridPane.add(saveButton, 1, 7);
 
+
         // Add GridPane to AnchorPane
         anchorPane.getChildren().add(gridPane);
 
@@ -94,6 +100,17 @@ public class AddCustomerView {
         stage.setTitle("Add Customer");
         stage.setScene(new Scene(anchorPane));
         stage.setResizable(false);
-        stage.showAndWait();
+        stage.show();
+        saveButton.setOnAction(e -> {
+            saveCustomer();
+            stage.close();
+
+        });
+    }
+
+    private void saveCustomer() {
+        Customer customer = new Customer(nameField.getText(), emailField.getText(), phoneField.getText(), addressField.getText());
+        CustomerListModelManager manager = new CustomerListModelManager();
+        manager.addCustomer(customer);
     }
 }

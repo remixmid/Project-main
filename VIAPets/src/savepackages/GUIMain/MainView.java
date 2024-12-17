@@ -89,10 +89,13 @@ public class MainView extends Application {
     @Override
     public void start(Stage primaryStage) {
         petListModelManager = new PetListModelManager();
+        customerListModelManager = new CustomerListModelManager();
+        bookingListModelManager = new BookingListModelManager();
+
         listOfPets = FXCollections.observableArrayList();
         listOfCustomers = FXCollections.observableArrayList();
-        bookingListModelManager = new BookingListModelManager();
         listOfBookings = FXCollections.observableArrayList();
+
 
         tabPane = new TabPane();
         tabPane.setPrefSize(1000, 400);
@@ -108,6 +111,10 @@ public class MainView extends Application {
         petList = petListModelManager.getAllPets();
         for (Pet pet: petList.getAllPetsForSale()) {
             listOfPets.add(pet);
+        }
+        customerList = customerListModelManager.getAllCustomers();
+        for (Customer customer: customerList.getAllCustomers()) {
+            listOfCustomers.add(customer);
         }
 
         // Tab 1

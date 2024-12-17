@@ -126,7 +126,7 @@ public class AddPetView  {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Add Pet");
         stage.setScene(new Scene(anchorPane));
-        stage.setResizable(true);
+        stage.setResizable(false);
         stage.show();
         saveButton.setOnAction(event -> stage.close());
     }
