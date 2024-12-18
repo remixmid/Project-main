@@ -19,12 +19,12 @@ public class AddBooking {
     private Label priceLabel;
     private Label dateInLabel;
     private Label dateOutLabel;
-    private TextField petField;
+    private ComboBox petField;
     private TextField priceField;
     private DatePicker dateInPicker;
     private DatePicker dateOutPicker;
     private Label customerLabel;
-    private TextField customerField;
+    private ComboBox customerField;
     private Button saveButton;
     private RowConstraints row;
     private LocalDate minDate;
@@ -76,11 +76,20 @@ public class AddBooking {
         dateOutLabel.setPrefSize(53, 17);
         gridPane.add(dateOutLabel, 0, 3);
 
-        petField = new TextField();
+        petField= new ComboBox();
+        petField.getItems().addAll("Dog", "Cat", "Bird");
         gridPane.add(petField, 1, 0);
+
 
         priceField = new TextField();
         gridPane.add(priceField, 1, 1);
+
+        customerLabel = new Label("Customer");
+        customerLabel.setPrefSize(70, 17);
+        gridPane.add(customerLabel, 0, 2);
+
+        customerField = new ComboBox<>();
+        gridPane.add(customerField, 1, 2);
 
         dateInPicker = new DatePicker();
         dateInPicker.setValue(LocalDate.now().plusDays(1)); // Set current date
@@ -91,7 +100,7 @@ public class AddBooking {
                 LocalDate nextDayDate = minDate.plusDays(1);
                 if (date.isBefore(nextDayDate)) {
                     setDisable(true);
-                     // Optional: style disabled dates
+
                 }
             }
         });
@@ -114,12 +123,7 @@ public class AddBooking {
         dateOutPicker.getEditor().setDisable(true); // Disable manual input
         gridPane.add(dateOutPicker, 1, 3);
 
-        customerLabel = new Label("Customer");
-        customerLabel.setPrefSize(70, 17);
-        gridPane.add(customerLabel, 0, 2);
 
-        customerField = new TextField();
-        gridPane.add(customerField, 1, 2);
 
         saveButton = new Button("Save");
         saveButton.setPrefSize(95, 25);

@@ -2,7 +2,7 @@ package Model;
 
 import java.util.Date;
 
-public class KennelPlace {
+public class  KennelPlace {
     private Date dateIn;
     private Date dateOut;
     private boolean isOccupied;
