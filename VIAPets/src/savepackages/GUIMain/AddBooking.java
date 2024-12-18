@@ -2,13 +2,17 @@ package savepackages.GUIMain;
 
 import Model.Customer;
 import Model.CustomerList;
+import Model.Price;
+import Model.Rodent;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import savepackages.BookingListModelManager;
 import savepackages.CustomerListModelManager;
+import savepackages.PetListModelManager;
 
 import java.time.LocalDate;
 
@@ -37,12 +41,7 @@ public class AddBooking {
         // Existing initialization code...
 
         // Populate customer ComboBox
-        CustomerListModelManager customerListModelManager = new CustomerListModelManager();
-        CustomerList customerList = customerListModelManager.getAllCustomers();
 
-        for (Customer customer : customerList.getAllCustomers()) {
-            customerField.getItems().add(customer.getName());
-        }
         minDate = LocalDate.of(2024, 12, 19);
 
         anchorPane = new AnchorPane();
@@ -103,6 +102,12 @@ public class AddBooking {
 
         customerField = new ComboBox<>();
         gridPane.add(customerField, 1, 2);
+        CustomerListModelManager customerListModelManager = new CustomerListModelManager();
+        CustomerList customerList = customerListModelManager.getAllCustomers();
+
+        for (Customer customer : customerList.getAllCustomers()) {
+            customerField.getItems().add(customer.getName());
+        }
 
         dateInPicker = new DatePicker();
         dateInPicker.setValue(LocalDate.now().plusDays(1)); // Set current date
@@ -152,5 +157,11 @@ public class AddBooking {
         stage.setResizable(false);
         stage.show();
         saveButton.setOnAction(event -> stage.close());
+    }
+    private void saveBooking() {
+        Price price1 = new Price(Integer.parseInt(priceField.getText()));
+        Boo
+        BookingListModelManager petListModelManager = new BookingListModelManager();
+        petListModelManager.addBooking();
     }
 }
