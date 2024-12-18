@@ -94,8 +94,9 @@ public class EditCustomerView  {
         saveButton.setPrefSize(95.0, 25.0);
         gridPane.add(saveButton, 1, 7);
         saveButton.setOnAction((event) -> {
-            stage.close();
             saveCustomer();
+            stage.close();
+
         });
 
         // Add GridPane to AnchorPane

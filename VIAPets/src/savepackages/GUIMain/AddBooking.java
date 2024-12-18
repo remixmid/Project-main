@@ -30,7 +30,7 @@ public class AddBooking {
     private LocalDate minDate;
 
     public void display() {
-        minDate = LocalDate.of(2024, 12, 18);
+        minDate = LocalDate.of(2024, 12, 19);
 
         anchorPane = new AnchorPane();
         anchorPane.setPrefSize(431, 242);
@@ -123,6 +123,7 @@ public class AddBooking {
         saveButton.setPrefSize(95, 25);
         gridPane.add(saveButton, 1, 5);
 
+
         anchorPane.getChildren().add(gridPane);
 
         stage = new Stage();
@@ -130,6 +131,7 @@ public class AddBooking {
         stage.setTitle("Add Booking");
         stage.setScene(new Scene(anchorPane));
         stage.setResizable(false);
-        stage.showAndWait();
+        stage.show();
+        saveButton.setOnAction(event -> stage.close());
     }
 }

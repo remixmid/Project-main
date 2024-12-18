@@ -222,7 +222,6 @@ public class MainView extends Application {
         tableView2.setPrefSize(391, 327);
         tableView2.setItems(listOfBookings);
         tableView4.setItems(listOfKennelPlaces);
-
         tableView4.setPrefSize(391, 311);
         anchorPane3 = new AnchorPane();
         anchorPane3.setPrefSize(391, 79);
