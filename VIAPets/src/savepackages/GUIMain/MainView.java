@@ -328,9 +328,9 @@ public class MainView extends Application {
         } else {
             // Показать предупреждение, если животное не выбрано
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Не выбрано");
-            alert.setHeaderText("Животное не выбрано");
-            alert.setContentText("Пожалуйста, выберите животное для редактирования.");
+            alert.setTitle("No Customer Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a customer to edit.");
             alert.showAndWait();
         }
         refreshPetList();
@@ -380,9 +380,9 @@ public class MainView extends Application {
         } else {
             // Показать предупреждение, если животное не выбрано
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Не выбрано");
-            alert.setHeaderText("Животное не выбрано");
-            alert.setContentText("Пожалуйста, выберите животное для редактирования.");
+            alert.setTitle("No Pet Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a pet to delete.");
             alert.showAndWait();
         }
         refreshPetList();

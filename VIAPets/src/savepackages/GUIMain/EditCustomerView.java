@@ -12,6 +12,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import savepackages.CustomerListModelManager;
 
 public class EditCustomerView  {
 
@@ -78,10 +79,10 @@ public class EditCustomerView  {
         gridPane.add(addressLabel, 0, 3);
 
         // Add TextFields
-        nameField = new TextField();
-        emailField = new TextField();
-        phoneField = new TextField();
-        addressField = new TextField();
+        nameField = new TextField(customer.getName());
+        emailField = new TextField(customer.getEmail());
+        phoneField = new TextField(customer.getPhoneNumber());
+        addressField = new TextField(customer.getAddress());
         gridPane.add(nameField, 1, 0);
         gridPane.add(emailField, 1, 1);
         gridPane.add(phoneField, 1, 2);
@@ -92,6 +93,10 @@ public class EditCustomerView  {
         saveButton.setMnemonicParsing(false);
         saveButton.setPrefSize(95.0, 25.0);
         gridPane.add(saveButton, 1, 7);
+        saveButton.setOnAction((event) -> {
+            stage.close();
+            saveCustomer();
+        });
 
         // Add GridPane to AnchorPane
         anchorPane.getChildren().add(gridPane);
@@ -102,7 +107,12 @@ public class EditCustomerView  {
         stage.setTitle("Edit Customer");
         stage.setScene(new Scene(anchorPane));
         stage.setResizable(false);
-        stage.showAndWait();
+        stage.show();
+    }
+    private void saveCustomer() {
+        Customer newCustomer = new Customer(nameField.getText(), emailField.getText(), phoneField.getText(), addressField.getText());
+        CustomerListModelManager manager = new CustomerListModelManager();
+        manager.editCustomer(customer,newCustomer);
     }
 
 
