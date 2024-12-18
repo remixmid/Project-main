@@ -337,8 +337,17 @@ public class MainView extends Application {
     }
 
     private void addKennelButton() {
-        kennel.addKennelPlace(new Price(0));
-        refreshKennel();
+        try {
+            kennelModelManager.addKennelPlace(new Price(0));
+            refreshKennel();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Failed to Add Kennel Place");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            e.printStackTrace();
+        }
     }
 
     private void openAddCustomerWindow() {

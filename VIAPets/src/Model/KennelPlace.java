@@ -1,8 +1,9 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class  KennelPlace {
+public class  KennelPlace implements Serializable {
     private Date dateIn;
     private Date dateOut;
     private boolean isOccupied;

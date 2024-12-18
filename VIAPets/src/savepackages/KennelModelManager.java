@@ -3,7 +3,10 @@ package savepackages;
 import Model.*;
 import Utils.MyFileHandler;
 
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,11 +18,17 @@ public class KennelModelManager {
         this.fileName = "Kennel.bin";
         try {
             File file = new File(this.fileName);
+            System.out.println("Attempting to create file at: " + file.getAbsolutePath());
+
             if (!file.exists()) {
-                file.createNewFile();
+                boolean created = file.createNewFile();
+                System.out.println("File creation attempt: " + created);
             }
+
+            System.out.println("Can write to file: " + file.canWrite());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.err.println("Error initializing kennel file:");
+            e.printStackTrace();
         }
     }
 
@@ -42,10 +51,17 @@ public class KennelModelManager {
         Kennel kennel = new Kennel();
         try {
             Object[] objects = MyFileHandler.readArrayFromBinaryFile(fileName);
-            for (Object obj : objects) {
-                KennelPlace kennelPlace = (KennelPlace) obj;
-                kennel.addPlace(kennelPlace);
+            if (objects != null) {
+                for (Object obj : objects) {
+                    if (obj instanceof KennelPlace) {
+                        KennelPlace kennelPlace = (KennelPlace) obj;
+                        kennel.addPlace(kennelPlace);
+                    }
+                }
             }
+        } catch (EOFException e) {
+            // File is empty or not properly initialized
+            System.out.println("Kennel file is empty. Creating a new kennel.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,8 +105,22 @@ public class KennelModelManager {
 
     public void saveKennel(Kennel kennel) {
         try {
-            MyFileHandler.writeArrayToBinaryFile(this.fileName, kennel.getAllKennelPlaces().toArray());
+            // Ensure the directory exists
+            File file = new File(this.fileName);
+            file.getParentFile().mkdirs(); // Create parent directories if they don't exist
+
+            // Use try-with-resources to ensure the stream is properly closed
+            try (FileOutputStream fos = new FileOutputStream(file);
+                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+
+                // Get the list of kennel places
+                ArrayList<KennelPlace> kennelPlaces = kennel.getAllKennelPlaces();
+
+                // Write the list to the file
+                oos.writeObject(kennelPlaces.toArray(new KennelPlace[0]));
+            }
         } catch (Exception e) {
+            System.err.println("Error saving kennel: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -100,7 +130,9 @@ public class KennelModelManager {
             Kennel kennel = getKennel();
             kennel.addKennelPlace(price);
             saveKennel(kennel);
+            System.out.println("Kennel place added successfully"); // Debug print
         } catch (Exception e) {
+            System.err.println("Error adding kennel place: " + e.getMessage());
             e.printStackTrace();
         }
     }
