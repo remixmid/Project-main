@@ -1,9 +1,6 @@
 package savepackages.GUIMain;
 
-import Model.Customer;
-import Model.CustomerList;
-import Model.Price;
-import Model.Rodent;
+import Model.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,6 +9,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import savepackages.BookingListModelManager;
 import savepackages.CustomerListModelManager;
+import savepackages.KennelModelManager;
 import savepackages.PetListModelManager;
 
 import java.time.LocalDate;
@@ -76,38 +74,66 @@ public class AddBooking {
         petLabel.setPrefSize(69, 25);
         gridPane.add(petLabel, 0, 0);
 
+        Label kennelPlaceLabel = new Label("Kennel Place");
+        kennelPlaceLabel.setPrefSize(100, 25);
+        gridPane.add(kennelPlaceLabel, 0, 1); // Shifting other fields down
+
+        ComboBox<Integer> kennelPlaceField = new ComboBox<>();
+        gridPane.add(kennelPlaceField, 1, 1); // Shifting other fields down
+
+        // Populate Kennel Place ComboBox
+        KennelModelManager kennelModelManager = new KennelModelManager();
+        Kennel kennel = kennelModelManager.getKennel();
+
+        for (KennelPlace kennelPlace : kennel.getAllKennelPlaces()) {
+                kennelPlaceField.getItems().add(kennelPlace.getKennelPlaceId());
+        }
+
         priceLabel = new Label("Price");
         priceLabel.setPrefSize(45, 17);
-        gridPane.add(priceLabel, 0, 1);
-
-        dateInLabel = new Label("Date Out");
-        dateInLabel.setPrefSize(55, 17);
-        gridPane.add(dateInLabel, 0, 4);
-
+        gridPane.add(priceLabel, 0, 2);
+        customerLabel = new Label("Customer");
+        customerLabel.setPrefSize(70, 17);
+        gridPane.add(customerLabel, 0, 3);
         dateOutLabel = new Label("Date In");
         dateOutLabel.setPrefSize(53, 17);
-        gridPane.add(dateOutLabel, 0, 3);
+        gridPane.add(dateOutLabel, 0, 4);
+        dateInLabel = new Label("Date Out");
+        dateInLabel.setPrefSize(55, 17);
+        gridPane.add(dateInLabel, 0, 5);
+
+
 
         petField= new ComboBox();
         petField.getItems().addAll("Dog", "Cat", "Bird");
         gridPane.add(petField, 1, 0);
-
-
         priceField = new TextField();
-        gridPane.add(priceField, 1, 1);
-
-        customerLabel = new Label("Customer");
-        customerLabel.setPrefSize(70, 17);
-        gridPane.add(customerLabel, 0, 2);
-
+        gridPane.add(priceField, 1, 2);
         customerField = new ComboBox<>();
-        gridPane.add(customerField, 1, 2);
+        gridPane.add(customerField, 1, 3);
+
         CustomerListModelManager customerListModelManager = new CustomerListModelManager();
         CustomerList customerList = customerListModelManager.getAllCustomers();
 
         for (Customer customer : customerList.getAllCustomers()) {
             customerField.getItems().add(customer.getName());
         }
+
+
+        dateOutPicker = new DatePicker();
+        dateOutPicker.setValue(LocalDate.now()); // Set current date
+        dateOutPicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date.isBefore(minDate)) {
+                    setDisable(true);
+                    // Optional: style disabled dates
+                }
+            }
+        });
+        dateOutPicker.getEditor().setDisable(true); // Disable manual input
+        gridPane.add(dateOutPicker, 1, 4);
 
         dateInPicker = new DatePicker();
         dateInPicker.setValue(LocalDate.now().plusDays(1)); // Set current date
@@ -123,29 +149,16 @@ public class AddBooking {
             }
         });
         dateInPicker.getEditor().setDisable(true); // Disable manual input
-        gridPane.add(dateInPicker, 1, 4);
+        gridPane.add(dateInPicker, 1, 5);
 
 
-        dateOutPicker = new DatePicker();
-        dateOutPicker.setValue(LocalDate.now()); // Set current date
-        dateOutPicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                if (date.isBefore(minDate)) {
-                    setDisable(true);
-                     // Optional: style disabled dates
-                }
-            }
-        });
-        dateOutPicker.getEditor().setDisable(true); // Disable manual input
-        gridPane.add(dateOutPicker, 1, 3);
+
 
 
 
         saveButton = new Button("Save");
         saveButton.setPrefSize(95, 25);
-        gridPane.add(saveButton, 1, 5);
+        gridPane.add(saveButton, 1, 6);
 
 
         anchorPane.getChildren().add(gridPane);
