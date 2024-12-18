@@ -1,11 +1,15 @@
 package savepackages.GUIMain;
 
+import Model.Customer;
+import Model.CustomerList;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import savepackages.CustomerListModelManager;
+
 import java.time.LocalDate;
 
 public class AddBooking {
@@ -30,6 +34,15 @@ public class AddBooking {
     private LocalDate minDate;
 
     public void display() {
+        // Existing initialization code...
+
+        // Populate customer ComboBox
+        CustomerListModelManager customerListModelManager = new CustomerListModelManager();
+        CustomerList customerList = customerListModelManager.getAllCustomers();
+
+        for (Customer customer : customerList.getAllCustomers()) {
+            customerField.getItems().add(customer.getName());
+        }
         minDate = LocalDate.of(2024, 12, 19);
 
         anchorPane = new AnchorPane();
