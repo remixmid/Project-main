@@ -285,6 +285,7 @@ public class MainView extends Application {
         customerAddressColumn = new TableColumn<>("Address");
         customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
         tableView3.getColumns().setAll(customerNameColumn,customerPhoneNumberColumn,customerEmailColumn,customerAddressColumn);
+        tableView3.setItems(listOfCustomers);
 
         hbox3 = new HBox(20);
         hbox3.setPrefSize(221, 65);
@@ -314,8 +315,9 @@ public class MainView extends Application {
 
     private void openAddCustomerWindow() {
         AddCustomerView addCustomerView = new AddCustomerView();
-        addCustomerView.display(); // Display the Add Customer View
+        addCustomerView.display();// Display the Add Customer View
         addCustomerView.stage.setOnHidden(event -> {refreshCustomerList();});
+
     }
     private void openEditCustomerWindow() {
         Customer selectedCustomer = tableView3.getSelectionModel().getSelectedItem();
@@ -365,6 +367,7 @@ public class MainView extends Application {
         listOfCustomers.clear();
         CustomerList customerList = customerListModelManager.getAllCustomers();
         listOfCustomers.addAll(customerList.getAllCustomers());
+        tableView3.setItems(listOfCustomers);
         tableView3.refresh();
     }
 
