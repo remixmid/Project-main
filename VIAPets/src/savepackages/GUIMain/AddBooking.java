@@ -158,10 +158,9 @@ public class AddBooking {
         stage.show();
         saveButton.setOnAction(event -> stage.close());
     }
-    private void saveBooking() {
-        Price price1 = new Price(Integer.parseInt(priceField.getText()));
-        Boo
-        BookingListModelManager petListModelManager = new BookingListModelManager();
-        petListModelManager.addBooking();
-    }
+//    private void saveBooking() {
+//        Price price1 = new Price(Integer.parseInt(priceField.getText()));
+//        BookingListModelManager petListModelManager = new BookingListModelManager();
+//        petListModelManager.addBooking();
+//    }
 }

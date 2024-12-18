@@ -244,6 +244,7 @@ public class MainView extends Application {
         tab2.setContent(anchorPane2);
         addBookingButton.setOnAction(e -> openAddBookView());
         editBookingButton.setOnAction(e -> openEditBooking());
+        addKenelPlaceButton.setOnAction(event -> addKennelButton());
         kennelPlaceIdColumn2 = new TableColumn<>("Id");
         kennelPlaceIdColumn2.setCellValueFactory(new PropertyValueFactory<>("kennelPlaceId"));
         kennelIsOccupied = new TableColumn<>("Is occupied");
@@ -335,6 +336,11 @@ public class MainView extends Application {
         }
     }
 
+    private void addKennelButton() {
+        kennel.addKennelPlace(new Price(0));
+        refreshKennel();
+    }
+
     private void openAddCustomerWindow() {
         AddCustomerView addCustomerView = new AddCustomerView();
         addCustomerView.display();// Display the Add Customer View
@@ -380,6 +386,14 @@ public class MainView extends Application {
         listOfBookings.addAll(bookingList.getBookingList());
         tableView2.setItems(listOfBookings);
         tableView2.refresh();
+    }
+
+    private void refreshKennel(){
+        listOfKennelPlaces.clear();
+        Kennel kennel = kennelModelManager.getKennel();
+        listOfKennelPlaces.addAll(kennel.getAllKennelPlaces());
+        tableView4.setItems(listOfKennelPlaces);
+        tableView4.refresh();
     }
 
 

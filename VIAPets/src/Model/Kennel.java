@@ -12,6 +12,7 @@ public class Kennel {
     }
 
     public ArrayList<KennelPlace> getAllKennelPlaces() {
+        sortKennelPlaces();
         return kennelPlaces;
     }
 
