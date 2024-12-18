@@ -7,7 +7,7 @@ public class KennelPlace {
     private Date dateOut;
     private boolean isOccupied;
     private int kennelPlaceId;
-    private Pet pet;
+    private String pet;
     private Price price;
 
     public KennelPlace(Price price) {
@@ -23,7 +23,7 @@ public class KennelPlace {
         return kennelPlaceId;
     }
 
-    public Pet getPet() {
+    public String getPet() {
         return pet;
     }
 
@@ -55,9 +55,8 @@ public class KennelPlace {
         this.kennelPlaceId = kennelPlaceId;
     }
 
-    public void setPet(Pet pet) {
-        if (pet.getClass() == Bird.class || pet.getClass() == Dog.class || pet.getClass() == Cat.class)
-            this.pet = pet;
+    public void setPet(String pet) {
+        this.pet = pet;
     }
 
     public void setPrice(Price price) {

@@ -14,7 +14,7 @@ public class BookingList {
         return bookingList;
     }
 
-    public void addBooking(Date dateIn, Date dateOut, Pet pet, Price price){
+    public void addBooking(Date dateIn, Date dateOut, String pet, Price price){
         Date dateFrom = new Date(dateIn.getDay(), dateIn.getMonth(), dateIn.getYear());
         Date dateTo = new Date(dateOut.getDay(), dateOut.getMonth(), dateOut.getYear());
         Date dateToCheckIn;
