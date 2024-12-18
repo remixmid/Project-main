@@ -300,7 +300,7 @@ public class MainView extends Application {
         editCustomerButton = new Button("Edit Customer");
         hbox3.getChildren().addAll(addCustomerButton, editCustomerButton);
         addCustomerButton.setOnAction(event -> openAddCustomerWindow());
-        editCustomerButton.setOnAction(event -> openEditCustomerWindow());
+        editCustomerButton.setOnAction(event -> openEditCustomerView());
 
         flowPane3.getChildren().addAll(tableView3, hbox3);
         tab3Content.getChildren().add(flowPane3);
@@ -341,22 +341,23 @@ public class MainView extends Application {
         addCustomerView.stage.setOnHidden(event -> {refreshCustomerList();});
 
     }
-    private void openEditCustomerWindow() {
+
+    private void openEditCustomerView(){
         Customer selectedCustomer = tableView3.getSelectionModel().getSelectedItem();
         if (selectedCustomer != null) {
             EditCustomerView editCustomerView = new EditCustomerView(selectedCustomer);
             editCustomerView.display();
-            editCustomerView.stage.setOnHidden(event -> {refreshCustomerList();});// Обновите список после редактирования
+            editCustomerView.stage.setOnHidden(event -> {refreshCustomerList();});
         } else {
-            // Показать предупреждение, если животное не выбрано
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No Customer Selected");
             alert.setHeaderText(null);
             alert.setContentText("Please select a customer to edit.");
             alert.showAndWait();
         }
-        refreshPetList();
+        refreshCustomerList();
     }
+
     private void openAddPetView(){
         AddPetView addPetView = new AddPetView();
         addPetView.display();
@@ -374,7 +375,11 @@ public class MainView extends Application {
     }
 
     private void refreshBookingList(){
-
+        listOfBookings.clear();
+        BookingList bookingList = bookingListModelManager.getAllBookings();
+        listOfBookings.addAll(bookingList.getBookingList());
+        tableView2.setItems(listOfBookings);
+        tableView2.refresh();
     }
 
 
@@ -394,6 +399,7 @@ public class MainView extends Application {
         tableView3.setItems(listOfCustomers);
         tableView3.refresh();
     }
+
 
     private void openEditPetView() {
         Pet selectedPet = tableView1.getSelectionModel().getSelectedItem();

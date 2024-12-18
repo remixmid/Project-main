@@ -92,12 +92,13 @@ public class AddBooking {
         gridPane.add(customerField, 1, 2);
 
         dateInPicker = new DatePicker();
-        dateInPicker.setValue(LocalDate.now()); // Set current date
+        dateInPicker.setValue(LocalDate.now().plusDays(1)); // Set current date
         dateInPicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                if (date.isBefore(minDate)) {
+                LocalDate nextDayDate = minDate.plusDays(1);
+                if (date.isBefore(nextDayDate)) {
                     setDisable(true);
 
                 }
@@ -105,6 +106,7 @@ public class AddBooking {
         });
         dateInPicker.getEditor().setDisable(true); // Disable manual input
         gridPane.add(dateInPicker, 1, 4);
+
 
         dateOutPicker = new DatePicker();
         dateOutPicker.setValue(LocalDate.now()); // Set current date
