@@ -93,28 +93,28 @@ public class MainView extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        //Declaration of models Managers
         petListModelManager = new PetListModelManager();
         customerListModelManager = new CustomerListModelManager();
         bookingListModelManager = new BookingListModelManager();
         kennelModelManager = new KennelModelManager();
-
+        //Declaration list for Tables
         listOfPets = FXCollections.observableArrayList();
         listOfCustomers = FXCollections.observableArrayList();
         listOfBookings = FXCollections.observableArrayList();
         listOfKennelPlaces = FXCollections.observableArrayList();
 
-
+        //Creating Main Pane
         tabPane = new TabPane();
         tabPane.setPrefSize(1000, 400);
         tabPane.setMaxSize(1000, 400);
         tabPane.setMinSize(1000, 400);
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
+        //Reading files and importing them to tables
         bookingList = bookingListModelManager.getAllBookings();
         for (KennelPlace kennelPlace : bookingList.getBookingList()) {
             listOfBookings.add(kennelPlace);
         }
-
         petList = petListModelManager.getAllPets();
         for (Pet pet: petList.getAllPetsForSale()) {
             listOfPets.add(pet);
@@ -129,7 +129,7 @@ public class MainView extends Application {
             listOfKennelPlaces.add(kennelPlace);
         }
 
-        // Tab 1
+        // Creating Shop Tab
         tab1 = new Tab("Shop");
         tab1Content = new VBox();
         tab1Content.setPrefSize(990, 390);
@@ -140,18 +140,17 @@ public class MainView extends Application {
         flowPane1.setPrefSize(990, 371);
         flowPane1.setMaxSize(990, 371);
         flowPane1.setMinSize(990, 371);
-
+        //Declaration of Pets Table
         tableView1 = new TableView<>();
         tableView1.setItems(listOfPets);
         tableView1.setPrefSize(990, 338);
         tableView1.setMaxSize(990, 338);
         tableView1.setMinSize(990, 338);
+        //Adding all Columns and importing all the necessary info to Columns
         nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
         ageColumn = new TableColumn<>("Age");
         ageColumn.setCellValueFactory(new PropertyValueFactory<>("age"));
-
         genderColumn = new TableColumn<>("Gender");
         genderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
         colorColumn = new TableColumn<>("Color");
@@ -188,21 +187,12 @@ public class MainView extends Application {
         addPetButton = new Button("Add Pet");
         editPetButton = new Button("Edit Pet");
         deletePetButton = new Button("Delete Pet");
-        deletePetButton.setOnAction(event -> {
-            Pet selectedPet = tableView1.getSelectionModel().getSelectedItem();
-            if (selectedPet != null) {
-                petListModelManager.deletePet(selectedPet);
-                refreshPetList();
-            } else {
-                // Optional: Show an alert if no pet is selected
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("No Pet Selected");
-                alert.setHeaderText(null);
-                alert.setContentText("Please select a pet to delete.");
-                alert.showAndWait();
-            }
-        });
+        //Set an action for Delete pet button
+        deletePetButton.setOnAction(event -> openDeletePetView());
+        //Set an action for Edit pet button
         editPetButton.setOnAction(e -> openEditPetView());
+        //Set an action for Add pet button
+        addPetButton.setOnAction(e -> openAddPetView());
 
 
         hbox1.getChildren().addAll(addPetButton, editPetButton, deletePetButton);
@@ -210,9 +200,9 @@ public class MainView extends Application {
         flowPane1.getChildren().addAll(tableView1, hbox1, new StackPane());
         tab1Content.getChildren().add(flowPane1);
         tab1.setContent(tab1Content);
-        addPetButton.setOnAction(e -> openAddPetView());
 
-        // Tab 2
+
+        //Creating Kennel Tab
         tab2 = new Tab("Kennel");
         anchorPane2 = new AnchorPane();
         hBox2 = new HBox(20);
@@ -228,10 +218,11 @@ public class MainView extends Application {
         vBox3 = new VBox();
         vBox3.setPrefSize(391, 374);
         tableView2 = new TableView();
+        tableView4 = new TableView();
         tableView2.setPrefSize(391, 327);
         tableView2.setItems(listOfBookings);
         tableView4.setItems(listOfKennelPlaces);
-        tableView4 = new TableView();
+
         tableView4.setPrefSize(391, 311);
         anchorPane3 = new AnchorPane();
         anchorPane3.setPrefSize(391, 79);
@@ -327,6 +318,24 @@ public class MainView extends Application {
         primaryStage.show();
     }
 
+    private void openDeletePetView() {
+        //Get the currently selected pet from the table view
+        Pet selectedPet = tableView1.getSelectionModel().getSelectedItem();
+        if (selectedPet != null) {
+            //If pet selected delete it
+            petListModelManager.deletePet(selectedPet);
+            //Refresh the pet list to reflect the changes
+            refreshPetList();
+        } else {
+            //Showing an alert if no pet is selected
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Pet Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a pet to delete.");
+            alert.showAndWait();
+        }
+    }
+
     private void openAddCustomerWindow() {
         AddCustomerView addCustomerView = new AddCustomerView();
         addCustomerView.display();// Display the Add Customer View
@@ -368,6 +377,8 @@ public class MainView extends Application {
     private void refreshBookingList(){
 
     }
+
+
 
     private void refreshPetList() {
         listOfPets.clear();

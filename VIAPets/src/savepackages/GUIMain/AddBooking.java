@@ -6,12 +6,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-
 import java.time.LocalDate;
 
-public class AddBooking   {
-
+public class AddBooking {
 
     private AnchorPane anchorPane;
     private GridPane gridPane;
@@ -30,9 +27,11 @@ public class AddBooking   {
     private TextField customerField;
     private Button saveButton;
     private RowConstraints row;
-
+    private LocalDate minDate;
 
     public void display() {
+        minDate = LocalDate.of(2024, 12, 18);
+
         anchorPane = new AnchorPane();
         anchorPane.setPrefSize(431, 242);
 
@@ -84,9 +83,33 @@ public class AddBooking   {
         gridPane.add(priceField, 1, 1);
 
         dateInPicker = new DatePicker();
+        dateInPicker.setValue(LocalDate.now()); // Set current date
+        dateInPicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date.isBefore(minDate)) {
+                    setDisable(true);
+                     // Optional: style disabled dates
+                }
+            }
+        });
+        dateInPicker.getEditor().setDisable(true); // Disable manual input
         gridPane.add(dateInPicker, 1, 4);
 
         dateOutPicker = new DatePicker();
+        dateOutPicker.setValue(LocalDate.now()); // Set current date
+        dateOutPicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date.isBefore(minDate)) {
+                    setDisable(true);
+                     // Optional: style disabled dates
+                }
+            }
+        });
+        dateOutPicker.getEditor().setDisable(true); // Disable manual input
         gridPane.add(dateOutPicker, 1, 3);
 
         customerLabel = new Label("Customer");
@@ -109,6 +132,4 @@ public class AddBooking   {
         stage.setResizable(false);
         stage.showAndWait();
     }
-
-
 }
