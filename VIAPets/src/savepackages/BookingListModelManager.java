@@ -21,6 +21,10 @@ public class BookingListModelManager {
         }
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
     public BookingList getAllBookings() {
         BookingList bookingList = new BookingList();
 

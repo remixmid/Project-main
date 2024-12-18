@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import savepackages.BookingListModelManager;
 import savepackages.CustomerListModelManager;
+import savepackages.KennelModelManager;
 import savepackages.PetListModelManager;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -20,12 +21,14 @@ import javafx.stage.Stage;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainView extends Application {
 
     private PetListModelManager petListModelManager;
     private ObservableList<Pet> listOfPets;
     private ObservableList<Customer> listOfCustomers;
+    private ObservableList<KennelPlace> listOfKennelPlaces;
     private BookingListModelManager bookingListModelManager;
     private ObservableList<KennelPlace> listOfBookings;
     private TabPane tabPane;
@@ -84,17 +87,21 @@ public class MainView extends Application {
     private BookingList bookingList;
     private CustomerList customerList;
     private CustomerListModelManager customerListModelManager;
+    private KennelModelManager kennelModelManager;
     private VBox vBox3;
+    private Kennel kennel;
 
     @Override
     public void start(Stage primaryStage) {
         petListModelManager = new PetListModelManager();
         customerListModelManager = new CustomerListModelManager();
         bookingListModelManager = new BookingListModelManager();
+        kennelModelManager = new KennelModelManager();
 
         listOfPets = FXCollections.observableArrayList();
         listOfCustomers = FXCollections.observableArrayList();
         listOfBookings = FXCollections.observableArrayList();
+        listOfKennelPlaces = FXCollections.observableArrayList();
 
 
         tabPane = new TabPane();
@@ -115,6 +122,11 @@ public class MainView extends Application {
         customerList = customerListModelManager.getAllCustomers();
         for (Customer customer: customerList.getAllCustomers()) {
             listOfCustomers.add(customer);
+        }
+
+        kennel = kennelModelManager.getKennel();
+        for (KennelPlace kennelPlace: kennel.getAllKennelPlaces()) {
+            listOfKennelPlaces.add(kennelPlace);
         }
 
         // Tab 1
@@ -217,6 +229,8 @@ public class MainView extends Application {
         vBox3.setPrefSize(391, 374);
         tableView2 = new TableView();
         tableView2.setPrefSize(391, 327);
+        tableView2.setItems(listOfBookings);
+        tableView4.setItems(listOfKennelPlaces);
         tableView4 = new TableView();
         tableView4.setPrefSize(391, 311);
         anchorPane3 = new AnchorPane();

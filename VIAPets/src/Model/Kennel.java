@@ -1,32 +1,26 @@
 package Model;
 
-public class Kennel {
-    private KennelPlace[] kennelPlaces;
-    private int amountOfPlaces;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-    public Kennel(int amountOfPlaces) {
-        this.amountOfPlaces = amountOfPlaces;
-        kennelPlaces = new KennelPlace[amountOfPlaces];
+public class Kennel {
+    private ArrayList<KennelPlace> kennelPlaces;
+
+    public Kennel() {
+        kennelPlaces = new ArrayList<>();
     }
 
-    public KennelPlace[] getAllKennelPlaces() {
+    public ArrayList<KennelPlace> getAllKennelPlaces() {
         return kennelPlaces;
     }
 
-    public int getAmountOfPlaces() {
-        return amountOfPlaces;
+    public void addPlace(KennelPlace place) {
+        kennelPlaces.add(place);
     }
 
     public void addKennelPlace(Price price) {
-        amountOfPlaces++;
-        KennelPlace[] newKennelPlaces = new KennelPlace[kennelPlaces.length + 1];
-        int i = 0;
-        for (KennelPlace kennelPlace : kennelPlaces) {
-            newKennelPlaces[i] = kennelPlace;
-            i++;
-        }
-        newKennelPlaces[amountOfPlaces - 1] = new KennelPlace(price);
-        this.kennelPlaces = newKennelPlaces;
+        kennelPlaces.add(new KennelPlace(price));
     }
 
     public KennelPlace getKennelPlaceById(int id) {
@@ -38,7 +32,12 @@ public class Kennel {
     }
 
     public void setKennelPlace(KennelPlace kennelPlace, int id) {
-        kennelPlaces[id] = kennelPlace;
+        this.sortKennelPlaces();
+        kennelPlaces.set(id, kennelPlace);
+    }
+
+    public void sortKennelPlaces() {
+        kennelPlaces.sort((o1, o2) -> Integer.compare(o1.getKennelPlaceId(), o2.getKennelPlaceId()));
     }
 
     @Override

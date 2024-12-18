@@ -1,8 +1,6 @@
 package savepackages;
 
-import Model.Customer;
-import Model.CustomerList;
-import Model.PetList;
+import Model.*;
 import Utils.MyFileHandler;
 
 public class CustomerListModelManager {
@@ -51,15 +49,41 @@ public class CustomerListModelManager {
 
     public void editCustomer(Customer customerToEdit, Customer editedCustomer) {
         try {
-            CustomerList customerList = getAllCustomers();
-            for (Customer customer : customerList.getAllCustomers()) {
-                if (customer.equals(customerToEdit)) {
-                    customer = editedCustomer;
-                    break;
+            // Read all existing pets from the file
+            Object[] objects = MyFileHandler.readArrayFromBinaryFile(this.fileName);
+
+            CustomerList customerList = new CustomerList();
+            boolean customerEdited = false;
+
+            for (Object obj : objects) {
+                Customer customer = (Customer) obj;
+
+                // More lenient comparison to help diagnose matching issues
+                if (customer.getName().equals(customerToEdit.getName())) {
+                    System.out.println("Found matching pet by name");
+
+                    // Update all basic pet attributes
+                    customer.setName(editedCustomer.getName());
+                    customer.setEmail(editedCustomer.getEmail());
+                    customer.setAddress(editedCustomer.getAddress());
+                    customer.setPhoneNumber(editedCustomer.getPhoneNumber());
+
+                    customerList.addCustomer(customer);
+                    customerEdited = true;
+                } else {
+                    customerList.addCustomer(customer);
                 }
             }
+
+            if (!customerEdited) {
+                customerList.addCustomer(editedCustomer);
+            }
+
+            // Save the updated pet list
             saveCustomerList(customerList);
+
         } catch (Exception e) {
+            System.out.println("Error during edit process:");
             e.printStackTrace();
         }
     }
