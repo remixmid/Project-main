@@ -36,10 +36,7 @@ public class AddBooking {
     private LocalDate minDate;
 
     public void display() {
-        // Existing initialization code...
-
-        // Populate customer ComboBox
-
+        // Displays the booking window
         minDate = LocalDate.of(2024, 12, 19);
 
         anchorPane = new AnchorPane();
@@ -76,39 +73,41 @@ public class AddBooking {
 
         Label kennelPlaceLabel = new Label("Kennel Place");
         kennelPlaceLabel.setPrefSize(100, 25);
-        gridPane.add(kennelPlaceLabel, 0, 1); // Shifting other fields down
+        gridPane.add(kennelPlaceLabel, 0, 1);
 
         ComboBox<Integer> kennelPlaceField = new ComboBox<>();
-        gridPane.add(kennelPlaceField, 1, 1); // Shifting other fields down
+        gridPane.add(kennelPlaceField, 1, 1);
 
-        // Populate Kennel Place ComboBox
         KennelModelManager kennelModelManager = new KennelModelManager();
         Kennel kennel = kennelModelManager.getKennel();
 
         for (KennelPlace kennelPlace : kennel.getAllKennelPlaces()) {
-                kennelPlaceField.getItems().add(kennelPlace.getKennelPlaceId());
+            kennelPlaceField.getItems().add(kennelPlace.getKennelPlaceId());
         }
 
         priceLabel = new Label("Price");
         priceLabel.setPrefSize(45, 17);
         gridPane.add(priceLabel, 0, 2);
+
         customerLabel = new Label("Customer");
         customerLabel.setPrefSize(70, 17);
         gridPane.add(customerLabel, 0, 3);
+
         dateOutLabel = new Label("Date In");
         dateOutLabel.setPrefSize(53, 17);
         gridPane.add(dateOutLabel, 0, 4);
+
         dateInLabel = new Label("Date Out");
         dateInLabel.setPrefSize(55, 17);
         gridPane.add(dateInLabel, 0, 5);
 
-
-
-        petField= new ComboBox();
+        petField = new ComboBox();
         petField.getItems().addAll("Dog", "Cat", "Bird");
         gridPane.add(petField, 1, 0);
+
         priceField = new TextField();
         gridPane.add(priceField, 1, 2);
+
         customerField = new ComboBox<>();
         gridPane.add(customerField, 1, 3);
 
@@ -119,7 +118,6 @@ public class AddBooking {
             customerField.getItems().add(customer.getName());
         }
 
-
         dateOutPicker = new DatePicker();
         dateOutPicker.setValue(LocalDate.now()); // Set current date
         dateOutPicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
@@ -128,7 +126,6 @@ public class AddBooking {
                 super.updateItem(date, empty);
                 if (date.isBefore(minDate)) {
                     setDisable(true);
-                    // Optional: style disabled dates
                 }
             }
         });
@@ -144,22 +141,15 @@ public class AddBooking {
                 LocalDate nextDayDate = minDate.plusDays(1);
                 if (date.isBefore(nextDayDate)) {
                     setDisable(true);
-
                 }
             }
         });
         dateInPicker.getEditor().setDisable(true); // Disable manual input
         gridPane.add(dateInPicker, 1, 5);
 
-
-
-
-
-
         saveButton = new Button("Save");
         saveButton.setPrefSize(95, 25);
         gridPane.add(saveButton, 1, 6);
-
 
         anchorPane.getChildren().add(gridPane);
 
@@ -171,9 +161,4 @@ public class AddBooking {
         stage.show();
         saveButton.setOnAction(event -> stage.close());
     }
-//    private void saveBooking() {
-//        Price price1 = new Price(Integer.parseInt(priceField.getText()));
-//        BookingListModelManager petListModelManager = new BookingListModelManager();
-//        petListModelManager.addBooking();
-//    }
 }

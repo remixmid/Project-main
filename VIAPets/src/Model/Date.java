@@ -1,37 +1,63 @@
 package Model;
 
-public class Date {
-    private int day;
-    private int month;
-    private int year;
-    public Date(int day, int month, int year){
-        if(day < 0){
-            this.day = 1;
-        }
-        if(day> 31){
-            this.day = 31;
-        }
-        else this.day = day;
+public class Date
+{
+  private int day;
+  private int month;
+  private int year;
 
-        if(month < 0){
-            this.month = 1;
-        }
-        if(month> 12){
-            this.month = 12;
-        }
-        else this.month = month;
-        this.year = year;
+  // Constructor that initializes day, month, and year with validation
+  public Date(int day, int month, int year)
+  {
+    if (day < 0)
+    {
+      this.day = 1;  // Ensures day is not negative
     }
-    public int getDay(){
-        return this.day;
+    if (day > 31)
+    {
+      this.day = 31;  // Ensures day does not exceed 31
     }
-    public int getMonth(){
-        return this.month;
+    else
+    {
+      this.day = day;
     }
-    public int getYear(){
-        return this.year;
+
+    if (month < 0)
+    {
+      this.month = 1;  // Ensures month is not negative
     }
-    public String toString(){
-        return day + "/" + month + "/" + year;
+    if (month > 12)
+    {
+      this.month = 12;  // Ensures month does not exceed 12
     }
+    else
+    {
+      this.month = month;
+    }
+    this.year = year;
+  }
+
+  // Returns the day of the date
+  public int getDay()
+  {
+    return this.day;
+  }
+
+  // Returns the month of the date
+  public int getMonth()
+  {
+    return this.month;
+  }
+
+  // Returns the year of the date
+  public int getYear()
+  {
+    return this.year;
+  }
+
+  // Converts the date to a string in the format "day/month/year"
+  public String toString()
+  {
+    return day + "/" + month + "/" + year;
+  }
 }

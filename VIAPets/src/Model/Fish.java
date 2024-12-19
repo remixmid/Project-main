@@ -1,51 +1,66 @@
 package Model;
 
-public class Fish extends Pet {
-    private String waterType;
-    private String predatorStatus;
-    private String type;
+public class Fish extends Pet
+{
+  private String waterType;
+  private String predatorStatus;
+  private String type;
 
-    public Fish(String name, int age, String gender, String color, String comment, boolean isForSale, Price price, String waterType, String predatorStatus) {
-        super(name, age, gender, color, comment, isForSale, price);
-        this.waterType = waterType;
-        this.predatorStatus = predatorStatus;
-        this.type = this.getClass().getSimpleName();
-    }
+  // Constructor to initialize Fish with details
+  public Fish(String name, int age, String gender, String color, String comment,
+      boolean isForSale, Price price, String waterType, String predatorStatus)
+  {
+    super(name, age, gender, color, comment, isForSale, price);
+    this.waterType = waterType;
+    this.predatorStatus = predatorStatus;
+    this.type = this.getClass().getSimpleName();
+  }
 
-    public String getType() {
-        return type;
-    }
+  // Returns the type of animal, which is "Fish"
+  public String getType()
+  {
+    return type;
+  }
 
-    public String getWaterType() {
-        return waterType;
-    }
+  // Returns the type of water the fish lives in
+  public String getWaterType()
+  {
+    return waterType;
+  }
 
-    public String getPredatorStatus() {
-        return predatorStatus;
-    }
+  // Returns the predator status of the fish
+  public String getPredatorStatus()
+  {
+    return predatorStatus;
+  }
 
-    @Override
-    public String toString() {
-        return "Fish " + super.toString();
-    }
+  // Converts the Fish object to a string format
+  @Override public String toString()
+  {
+    return "Fish " + super.toString();
+  }
 
-    @Override
-    public boolean equals(Object object) {
-        if (object == null || this.getClass() != object) {
-            return false;
-        }
-        Fish fish = (Fish) object;
-        if (super.equals(fish) && fish.getWaterType().equals(getWaterType()) && fish.getPredatorStatus().equals(getPredatorStatus())) {
-            return true;
-        }
-        return false;
+  // Checks equality of two Fish objects based on water type, predator status, and superclass
+  @Override public boolean equals(Object object)
+  {
+    if (object == null || this.getClass() != object)
+    {
+      return false;
     }
+    Fish fish = (Fish) object;
+    return super.equals(fish) && fish.getWaterType().equals(getWaterType())
+        && fish.getPredatorStatus().equals(getPredatorStatus());
+  }
 
-    public void setWaterType(String waterType) {
-        this.waterType = waterType;
-    }
+  // Sets the water type of the fish
+  public void setWaterType(String waterType)
+  {
+    this.waterType = waterType;
+  }
 
-    public void setPredatorStatus(String predatorStatus) {
-        this.predatorStatus = predatorStatus;
-    }
+  // Sets the predator status of the fish
+  public void setPredatorStatus(String predatorStatus)
+  {
+    this.predatorStatus = predatorStatus;
+  }
 }
