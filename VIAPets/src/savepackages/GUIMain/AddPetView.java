@@ -268,7 +268,9 @@ public class AddPetView  {
 
     public void saveDog() {
         Price price1 = new Price(Integer.parseInt(priceField.getText()));
-        Dog dog = new Dog(nameField.getText(), Integer.parseInt(ageField.getText()) , genderField.getText(), colorField.getText(), commentField.getText(), true , price1 , breedField.getText(), breederField.getText());
+        Dog dog = new Dog(nameField.getText(), Integer.parseInt(ageField.getText()) ,
+                genderField.getText(), colorField.getText(), commentField.getText(),
+                true , price1 , breedField.getText(), breederField.getText());
         PetListModelManager petListModelManager = new PetListModelManager();
         petListModelManager.addPetForSale(dog);
     }
