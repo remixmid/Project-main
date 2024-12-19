@@ -1,8 +1,6 @@
 package savepackages.GUIMain;
 
 import Model.*;
-import com.sun.tools.javac.Main;
-import javafx.scene.Node;
 import savepackages.PetListModelManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -137,12 +135,11 @@ public class AddPetView  {
         public void handle(ActionEvent event) {
             if (event.getSource() == comboBox) {
                 String selected = comboBox.getSelectionModel().getSelectedItem();
-                addAnimalSpecificFields(selected);
+                addPetSpecificFields(selected);
             }
         }
 
-        private void addAnimalSpecificFields(String animalType) {
-            // Clear previous animal-specific fields
+        private void addPetSpecificFields(String animalType) {
             gridPane.getChildren().removeIf(node -> GridPane.getRowIndex(node) > 6);
 
             Stage currentStage = (Stage) gridPane.getScene().getWindow();

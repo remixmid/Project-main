@@ -429,13 +429,12 @@ public class MainView extends Application {
         if (selectedPet != null) {
             EditPetView editPetView = new EditPetView(selectedPet);
             editPetView.display();
-            editPetView.stage.setOnHidden(event -> {refreshPetList();});// Обновите список после редактирования
+            editPetView.stage.setOnHidden(event -> {refreshPetList();});
         } else {
-            // Показать предупреждение, если животное не выбрано
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("No Pet Selected");
             alert.setHeaderText(null);
-            alert.setContentText("Please select a pet to delete.");
+            alert.setContentText("Please select a pet to edit.");
             alert.showAndWait();
         }
         refreshPetList();
@@ -446,6 +445,4 @@ public class MainView extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
-
 }

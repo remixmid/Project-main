@@ -13,6 +13,7 @@ import savepackages.KennelModelManager;
 import savepackages.PetListModelManager;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class AddBooking {
 
@@ -34,6 +35,7 @@ public class AddBooking {
     private Button saveButton;
     private RowConstraints row;
     private LocalDate minDate;
+    private ComboBox<Integer> kennelPlaceField;
 
     public void display() {
         // Existing initialization code...
@@ -78,8 +80,11 @@ public class AddBooking {
         kennelPlaceLabel.setPrefSize(100, 25);
         gridPane.add(kennelPlaceLabel, 0, 1); // Shifting other fields down
 
-        ComboBox<Integer> kennelPlaceField = new ComboBox<>();
-        gridPane.add(kennelPlaceField, 1, 1); // Shifting other fields down
+
+        kennelPlaceField = new ComboBox<>();
+        kennelPlaceField.getItems().addAll(1,2,3,4,5,6,7,8,9,10);
+        gridPane.add(kennelPlaceField, 1, 1);
+        // Shifting other fields down
 
         // Populate Kennel Place ComboBox
         KennelModelManager kennelModelManager = new KennelModelManager();
@@ -169,11 +174,28 @@ public class AddBooking {
         stage.setScene(new Scene(anchorPane));
         stage.setResizable(false);
         stage.show();
-        saveButton.setOnAction(event -> stage.close());
+        saveButton.setOnAction(event -> {
+            saveBooking();
+            stage.close();
+        });
     }
-//    private void saveBooking() {
-//        Price price1 = new Price(Integer.parseInt(priceField.getText()));
-//        BookingListModelManager petListModelManager = new BookingListModelManager();
-//        petListModelManager.addBooking();
-//    }
+    private void saveBooking() {
+        Price price1 = new Price(Integer.parseInt(priceField.getText()));
+        KennelPlace kennelPlaceToAdd = new KennelPlace(price1);
+        int selectedKennelPlaceId = kennelPlaceField.getSelectionModel().getSelectedItem();
+        kennelPlaceToAdd.setPet(petField.getValue().toString());
+        LocalDate dateIn = dateInPicker.getValue();
+        LocalDate dateOut = dateOutPicker.getValue();
+        java.util.Date setDateIn = new java.util.Date(dateIn.getDayOfMonth(), dateIn.getMonthValue(), dateIn.getYear());
+        java.util.Date setDateOut = new Date(dateOut.getDayOfMonth(), dateOut.getMonthValue(), dateOut.getYear());
+
+        kennelPlaceToAdd.setPet(petField.getValue().toString());
+        kennelPlaceToAdd.setDateIn(setDateIn);
+        kennelPlaceToAdd.setDateOut(setDateOut);
+        kennelPlaceToAdd.setOccupied(true);
+        kennelPlaceToAdd.setKennelPlaceId(selectedKennelPlaceId);
+
+        BookingListModelManager bookingListModelManagerManager = new BookingListModelManager();
+        bookingListModelManagerManager.addBooking(kennelPlaceToAdd);
+    }
 }
