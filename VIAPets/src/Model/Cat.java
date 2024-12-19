@@ -12,12 +12,6 @@ public class Cat extends Pet {
         this.type = this.getClass().getSimpleName();
     }
 
-    public Cat(String name, int age, String gender, String color, String comment, boolean isForSale, String breed, String breeder) {
-        super(name, age, gender, color, comment, isForSale);
-        Breed = breed;
-        Breeder = breeder;
-    }
-
     public String getType() {
         return type;
     }
@@ -37,14 +31,13 @@ public class Cat extends Pet {
 
     @Override
     public boolean equals(Object object) {
-        if (object == null || this.getClass() != object) {
+        if (object == null || this.getClass() != object.getClass()) {
             return false;
         }
         Cat cat = (Cat) object;
-        if (super.equals(cat) && cat.getBreed().equals(getBreed()) && cat.getBreeder().equals(getBreeder())) {
-            return true;
-        }
-        return false;
+        return super.equals(cat) &&
+                cat.getBreed().equals(getBreed()) &&
+                cat.getBreeder().equals(getBreeder());
     }
 
     public void setBreed(String breed) {

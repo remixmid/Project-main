@@ -128,7 +128,7 @@ public class EditPetView  {
         // Set Scene
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Add Pet");
+        stage.setTitle("Edit Pet");
         stage.setScene(new Scene(anchorPane));
         stage.setResizable(true);
         stage.show();

@@ -31,14 +31,13 @@ public class Fish extends Pet {
 
     @Override
     public boolean equals(Object object) {
-        if (object == null || this.getClass() != object) {
+        if (object == null || this.getClass() != object.getClass()) {
             return false;
         }
         Fish fish = (Fish) object;
-        if (super.equals(fish) && fish.getWaterType().equals(getWaterType()) && fish.getPredatorStatus().equals(getPredatorStatus())) {
-            return true;
-        }
-        return false;
+        return super.equals(fish) &&
+                fish.getWaterType().equals(getWaterType()) &&
+                fish.getPredatorStatus().equals(getPredatorStatus());
     }
 
     public void setWaterType(String waterType) {

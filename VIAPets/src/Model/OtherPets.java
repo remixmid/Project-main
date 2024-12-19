@@ -25,14 +25,13 @@ public class OtherPets extends Pet{
 
     @Override
     public boolean equals(Object object) {
-        if (object == null || this.getClass() != object) {
+        if (object == null || this.getClass() != object.getClass()) {
             return false;
         }
         OtherPets otherPets = (OtherPets) object;
-        if (super.equals(otherPets) && otherPets.getBreed().equals(getBreed()) && otherPets.getType().equals(getType())) {
-            return true;
-        }
-        return false;
+        return super.equals(otherPets) &&
+                otherPets.getBreed().equals(getBreed()) &&
+                otherPets.getType().equals(getType());
     }
 
     public void setType(String type) {

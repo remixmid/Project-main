@@ -25,14 +25,12 @@ public class Rodent extends Pet {
 
     @Override
     public boolean equals(Object object) {
-        if (object == null || this.getClass() != object) {
+        if (object == null || this.getClass() != object.getClass()) {
             return false;
         }
         Rodent rodent = (Rodent) object;
-        if (super.equals(rodent) && rodent.getBitingTendency().equals(getBitingTendency())) {
-            return true;
-        }
-        return false;
+        return super.equals(rodent) &&
+                rodent.getBitingTendency().equals(getBitingTendency());
     }
 
     public void setBitingTendency(String bitingTendency) {

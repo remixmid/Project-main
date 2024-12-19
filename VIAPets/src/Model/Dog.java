@@ -38,14 +38,13 @@ public class Dog extends Pet {
 
     @Override
     public boolean equals(Object object) {
-        if (object == null || this.getClass() != object) {
+        if (object == null || this.getClass() != object.getClass()) {
             return false;
         }
         Dog dog = (Dog) object;
-        if (super.equals(dog) && dog.getBreed().equals(getBreed()) && dog.getBreeder().equals(getBreeder())) {
-            return true;
-        }
-        return false;
+        return super.equals(dog) &&
+                dog.getBreed().equals(getBreed()) &&
+                dog.getBreeder().equals(getBreeder());
     }
 
     public void setBreed(String breed) {
