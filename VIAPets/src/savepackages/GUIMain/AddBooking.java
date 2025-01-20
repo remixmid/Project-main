@@ -1,7 +1,6 @@
 package savepackages.GUIMain;
 
 import Model.*;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -10,39 +9,23 @@ import javafx.stage.Stage;
 import savepackages.BookingListModelManager;
 import savepackages.CustomerListModelManager;
 import savepackages.KennelModelManager;
-import savepackages.PetListModelManager;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class AddBooking {
-
     private AnchorPane anchorPane;
     private GridPane gridPane;
-    private ColumnConstraints col1;
-    private ColumnConstraints col2;
     public Stage stage;
-    private Label petLabel;
-    private Label priceLabel;
-    private Label dateInLabel;
-    private Label dateOutLabel;
-    private ComboBox petField;
+    private ComboBox<String> petField;
     private TextField priceField;
     private DatePicker dateInPicker;
     private DatePicker dateOutPicker;
-    private Label customerLabel;
-    private ComboBox customerField;
-    private Button saveButton;
-    private RowConstraints row;
-    private LocalDate minDate;
+    private ComboBox<String> customerField;
     private ComboBox<Integer> kennelPlaceField;
+    private LocalDate minDate;
 
     public void display() {
-        // Existing initialization code...
-
-        // Populate customer ComboBox
-
-        minDate = LocalDate.of(2024, 12, 19);
+        minDate = LocalDate.now(); // Set minimum date to today
 
         anchorPane = new AnchorPane();
         anchorPane.setPrefSize(431, 242);
@@ -52,119 +35,119 @@ public class AddBooking {
         gridPane.setLayoutY(8);
         gridPane.setPrefSize(429, 227);
 
-        col1 = new ColumnConstraints();
+        // Set up grid constraints
+        ColumnConstraints col1 = new ColumnConstraints();
         col1.setHgrow(Priority.SOMETIMES);
         col1.setMinWidth(10);
         col1.setPrefWidth(100);
 
-        col2 = new ColumnConstraints();
+        ColumnConstraints col2 = new ColumnConstraints();
         col2.setHgrow(Priority.SOMETIMES);
         col2.setMinWidth(10);
         col2.setPrefWidth(100);
 
         gridPane.getColumnConstraints().addAll(col1, col2);
 
+        // Set up row constraints
         for (int i = 0; i < 6; i++) {
-            row = new RowConstraints();
+            RowConstraints row = new RowConstraints();
             row.setMinHeight(10);
             row.setPrefHeight(30);
             row.setVgrow(Priority.SOMETIMES);
             gridPane.getRowConstraints().add(row);
         }
 
-        petLabel = new Label("Pet");
-        petLabel.setPrefSize(69, 25);
-        gridPane.add(petLabel, 0, 0);
+        // Add labels
+        gridPane.add(new Label("Pet"), 0, 0);
+        gridPane.add(new Label("Kennel Place"), 0, 1);
+        gridPane.add(new Label("Price"), 0, 2);
+        gridPane.add(new Label("Customer"), 0, 3);
+        gridPane.add(new Label("Check-in Date"), 0, 4);
+        gridPane.add(new Label("Check-out Date"), 0, 5);
 
-        Label kennelPlaceLabel = new Label("Kennel Place");
-        kennelPlaceLabel.setPrefSize(100, 25);
-        gridPane.add(kennelPlaceLabel, 0, 1); // Shifting other fields down
-
-
-        kennelPlaceField = new ComboBox<>();
-        kennelPlaceField.getItems().addAll(1,2,3,4,5,6,7,8,9,10);
-        gridPane.add(kennelPlaceField, 1, 1);
-        // Shifting other fields down
-
-        // Populate Kennel Place ComboBox
-        KennelModelManager kennelModelManager = new KennelModelManager();
-        Kennel kennel = kennelModelManager.getKennel();
-
-        for (KennelPlace kennelPlace : kennel.getAllKennelPlaces()) {
-                kennelPlaceField.getItems().add(kennelPlace.getKennelPlaceId());
-        }
-
-        priceLabel = new Label("Price");
-        priceLabel.setPrefSize(45, 17);
-        gridPane.add(priceLabel, 0, 2);
-        customerLabel = new Label("Customer");
-        customerLabel.setPrefSize(70, 17);
-        gridPane.add(customerLabel, 0, 3);
-        dateOutLabel = new Label("Date In");
-        dateOutLabel.setPrefSize(53, 17);
-        gridPane.add(dateOutLabel, 0, 4);
-        dateInLabel = new Label("Date Out");
-        dateInLabel.setPrefSize(55, 17);
-        gridPane.add(dateInLabel, 0, 5);
-
-
-
-        petField= new ComboBox();
+        // Initialize and set up fields
+        petField = new ComboBox<>();
         petField.getItems().addAll("Dog", "Cat", "Bird");
         gridPane.add(petField, 1, 0);
+
+        kennelPlaceField = new ComboBox<>();
+        KennelModelManager kennelModelManager = new KennelModelManager();
+        Kennel kennel = kennelModelManager.getKennel();
+        for (KennelPlace kennelPlace : kennel.getAllKennelPlaces()) {
+            kennelPlaceField.getItems().add(kennelPlace.getKennelPlaceId());
+        }
+        gridPane.add(kennelPlaceField, 1, 1);
+
         priceField = new TextField();
         gridPane.add(priceField, 1, 2);
-        customerField = new ComboBox<>();
-        gridPane.add(customerField, 1, 3);
 
+        customerField = new ComboBox<>();
         CustomerListModelManager customerListModelManager = new CustomerListModelManager();
         CustomerList customerList = customerListModelManager.getAllCustomers();
-
         for (Customer customer : customerList.getAllCustomers()) {
             customerField.getItems().add(customer.getName());
         }
+        gridPane.add(customerField, 1, 3);
 
-
-        dateOutPicker = new DatePicker();
-        dateOutPicker.setValue(LocalDate.now()); // Set current date
-        dateOutPicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                if (date.isBefore(minDate)) {
-                    setDisable(true);
-                    // Optional: style disabled dates
-                }
-            }
-        });
-        dateOutPicker.getEditor().setDisable(true); // Disable manual input
-        gridPane.add(dateOutPicker, 1, 4);
-
+        // Set up check-in date picker
         dateInPicker = new DatePicker();
-        dateInPicker.setValue(LocalDate.now().plusDays(1)); // Set current date
-        dateInPicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
+        dateInPicker.setValue(LocalDate.now());
+        dateInPicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                LocalDate nextDayDate = minDate.plusDays(1);
-                if (date.isBefore(nextDayDate)) {
-                    setDisable(true);
+                // Disable dates before today
+                setDisable(empty || date.isBefore(minDate));
+            }
+        });
+        dateInPicker.getEditor().setDisable(true);
+        gridPane.add(dateInPicker, 1, 4);
 
+        // Set up check-out date picker
+        dateOutPicker = new DatePicker();
+        dateOutPicker.setValue(LocalDate.now().plusDays(1));
+        dateOutPicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate checkInDate = dateInPicker.getValue();
+                if (checkInDate != null) {
+                    // Disable dates before or equal to check-in date
+                    setDisable(empty || date.isBefore(checkInDate) || date.isEqual(checkInDate));
                 }
             }
         });
-        dateInPicker.getEditor().setDisable(true); // Disable manual input
-        gridPane.add(dateInPicker, 1, 5);
+        dateOutPicker.getEditor().setDisable(true);
+        gridPane.add(dateOutPicker, 1, 5);
 
+        // Update check-out picker's disabled dates when check-in date changes
+        dateInPicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                // If current check-out date is invalid with new check-in date, update it
+                LocalDate currentCheckOut = dateOutPicker.getValue();
+                if (currentCheckOut == null || currentCheckOut.isBefore(newVal) || currentCheckOut.isEqual(newVal)) {
+                    dateOutPicker.setValue(newVal.plusDays(1));
+                }
 
+                // Update disabled dates for check-out picker
+                dateOutPicker.setDayCellFactory(picker -> new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+                        setDisable(empty || date.isBefore(newVal) || date.isEqual(newVal));
+                    }
+                });
+            }
+        });
 
-
-
-
-        saveButton = new Button("Save");
+        Button saveButton = new Button("Save");
         saveButton.setPrefSize(95, 25);
         gridPane.add(saveButton, 1, 6);
-
+        saveButton.setOnAction(event -> {
+            if (saveBooking()) {
+                stage.close();
+            }
+        });
 
         anchorPane.getChildren().add(gridPane);
 
@@ -174,80 +157,69 @@ public class AddBooking {
         stage.setScene(new Scene(anchorPane));
         stage.setResizable(false);
         stage.show();
-        saveButton.setOnAction(event -> {
-            saveBooking();
-            stage.close();
-        });
     }
-    private void saveBooking() {
+
+    private boolean saveBooking() {
         try {
-            // Validate input
+            // Validate all required fields
             if (petField.getValue() == null ||
                     priceField.getText().isEmpty() ||
                     dateInPicker.getValue() == null ||
                     dateOutPicker.getValue() == null ||
-                    kennelPlaceField.getValue() == null) {
-
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Input Error");
-                alert.setContentText("Please fill in all fields");
-                alert.showAndWait();
-                return;
+                    kennelPlaceField.getValue() == null ||
+                    customerField.getValue() == null) {
+                showError("Input Error", "Please fill in all fields");
+                return false;
             }
 
-            // Validate dates
-            if (dateInPicker.getValue().isBefore(dateOutPicker.getValue()) == false) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Date Error");
-                alert.setContentText("Check-out date must be after check-in date");
-                alert.showAndWait();
-                return;
+            // Validate price
+            int price;
+            try {
+                price = Integer.parseInt(priceField.getText());
+                if (price <= 0) {
+                    showError("Price Error", "Price must be greater than 0");
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                showError("Price Error", "Please enter a valid price");
+                return false;
             }
 
-            int price = Integer.parseInt(priceField.getText());
-            Price price1 = new Price(price);
-            KennelPlace kennelPlaceToAdd = new KennelPlace(price1);
-
-            int selectedKennelPlaceId = kennelPlaceField.getValue();
-            kennelPlaceToAdd.setKennelPlaceId(selectedKennelPlaceId);
-            kennelPlaceToAdd.setPet(petField.getValue().toString());
-
-            LocalDate dateIn = dateInPicker.getValue();
-            LocalDate dateOut = dateOutPicker.getValue();
-            if (dateOut.isBefore(dateIn) || dateOut.isEqual(dateIn)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Invalid Dates");
-                alert.setContentText("Check-out date must be after check-in date");
-                alert.showAndWait();
-                return;
-            }
-
-// Convert to java.util.Date properly
-            kennelPlaceToAdd.setDateIn(java.sql.Date.valueOf(dateIn));
-            kennelPlaceToAdd.setDateOut(java.sql.Date.valueOf(dateOut));
+            // Create booking with all required properties
+            Price bookingPrice = new Price(price);
+            KennelPlace kennelPlaceToAdd = new KennelPlace(bookingPrice);
+            kennelPlaceToAdd.setKennelPlaceId(kennelPlaceField.getValue());
+            kennelPlaceToAdd.setPet(petField.getValue());
+            kennelPlaceToAdd.setDateIn(java.sql.Date.valueOf(dateInPicker.getValue()));
+            kennelPlaceToAdd.setDateOut(java.sql.Date.valueOf(dateOutPicker.getValue()));
             kennelPlaceToAdd.setOccupied(true);
 
+            // Save booking and verify it was saved
             BookingListModelManager bookingListModelManager = new BookingListModelManager();
             bookingListModelManager.addBooking(kennelPlaceToAdd);
 
-            stage.close();
+            System.out.println("Saved booking: ID=" + kennelPlaceToAdd.getKennelPlaceId() +
+                    ", Pet=" + kennelPlaceToAdd.getPet() +
+                    ", DateIn=" + kennelPlaceToAdd.getDateIn());
 
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Input Error");
-            alert.setContentText("Please enter a valid price");
-            alert.showAndWait();
+            return true;
+
         } catch (IllegalStateException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Booking Error");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            showError("Booking Error", e.getMessage());
+            return false;
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText("An error occurred while saving the booking");
-            alert.showAndWait();
+            showError("Error", "An error occurred while saving the booking");
             e.printStackTrace();
+            return false;
         }
+
+    }
+
+
+    private void showError(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

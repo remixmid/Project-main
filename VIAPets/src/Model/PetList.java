@@ -1,9 +1,10 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class PetList {
+public class PetList implements Serializable {
     private ArrayList<Pet> pets;
 
     public PetList() {

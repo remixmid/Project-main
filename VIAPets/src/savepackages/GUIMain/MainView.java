@@ -90,6 +90,7 @@ public class MainView extends Application {
     private KennelModelManager kennelModelManager;
     private VBox vBox3;
     private Kennel kennel;
+    private TableColumn<Customer, String> customerNameBooking;
 
     @Override
     public void start(Stage primaryStage) {
@@ -253,16 +254,25 @@ public class MainView extends Application {
         kennelPlaceIdColumn.setCellValueFactory(new PropertyValueFactory<>("kennelPlaceId"));
         tableView4.getColumns().addAll(kennelPlaceIdColumn2, kennelIsOccupied);
 
-        dateInColumn = new TableColumn<>("Date in ");
+        kennelPlaceIdColumn = new TableColumn<>("Kennel ID");
+        kennelPlaceIdColumn.setCellValueFactory(new PropertyValueFactory<>("kennelPlaceId"));
+
+        dateInColumn = new TableColumn<>("Check In");
         dateInColumn.setCellValueFactory(new PropertyValueFactory<>("dateIn"));
-        dateOutColumn = new TableColumn<>("Date out ");
+
+        dateOutColumn = new TableColumn<>("Check Out");
         dateOutColumn.setCellValueFactory(new PropertyValueFactory<>("dateOut"));
+
         kennelPriceColumn = new TableColumn<>("Price");
-        kennelPriceColumn.setCellValueFactory(new PropertyValueFactory<>("kennelPrice"));
+        kennelPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+
         kennelHasThisPetColumn = new TableColumn<>("Pet");
-        kennelHasThisPetColumn.setPrefWidth(94);
         kennelHasThisPetColumn.setCellValueFactory(new PropertyValueFactory<>("pet"));
-        tableView2.getColumns().addAll(kennelPlaceIdColumn,dateInColumn,dateOutColumn,kennelPriceColumn,kennelHasThisPetColumn);
+        kennelHasThisPetColumn.setPrefWidth(94);
+        customerNameBooking = new TableColumn<>("Customer Name");
+        customerNameBooking.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableView2.getColumns().addAll(kennelPlaceIdColumn,dateInColumn,dateOutColumn,kennelPriceColumn,kennelHasThisPetColumn,customerNameBooking);
+        refreshBookingList();
 
         // Tab 3
         tab3 = new Tab("Customers");
@@ -386,17 +396,50 @@ public class MainView extends Application {
         addBooking.display();
         addBooking.stage.setOnHidden(event -> {refreshBookingList();});
     }
-    private void openEditBooking(){
-        EditBooking editBooking = new EditBooking();
-        editBooking.display();
+    private void openEditBooking() {
+        KennelPlace selectedBooking = (KennelPlace) tableView2.getSelectionModel().getSelectedItem();
+        if (selectedBooking != null) {
+            EditBooking editBooking = new EditBooking(selectedBooking);
+            editBooking.display();
+            editBooking.stage.setOnHidden(event -> {
+                refreshBookingList();
+            });
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("No Booking Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a booking to edit.");
+            alert.showAndWait();
+        }
     }
 
-    private void refreshBookingList(){
-        listOfBookings.clear();
-        BookingList bookingList = bookingListModelManager.getAllBookings();
-        listOfBookings.addAll(bookingList.getBookingList());
-        tableView2.setItems(listOfBookings);
-        tableView2.refresh();
+    private void refreshBookingList() {
+        try {
+            listOfBookings.clear();
+            BookingList bookingList = bookingListModelManager.getAllBookings();
+            if (bookingList != null && bookingList.getBookingList() != null) {
+                for (KennelPlace booking : bookingList.getBookingList()) {
+                    System.out.println("Adding to table: ID=" + booking.getKennelPlaceId() +
+                            ", Pet=" + booking.getPet() +
+                            ", DateIn=" + booking.getDateIn());
+                    listOfBookings.add(booking);
+                }
+            }
+
+            tableView2.setItems(listOfBookings);
+            tableView2.refresh();
+
+            // Verify the IDs in the table
+            for (KennelPlace booking : listOfBookings) {
+                System.out.println("Booking in table: ID=" + booking.getKennelPlaceId() +
+                        ", Pet=" + booking.getPet() +
+                        ", DateIn=" + booking.getDateIn());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error refreshing booking list: " + e.getMessage());
+        }
     }
 
     private void refreshKennel(){

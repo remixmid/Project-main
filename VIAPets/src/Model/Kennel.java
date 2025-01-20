@@ -1,10 +1,11 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class Kennel {
+public class Kennel implements Serializable {
     private ArrayList<KennelPlace> kennelPlaces;
 
     public Kennel() {

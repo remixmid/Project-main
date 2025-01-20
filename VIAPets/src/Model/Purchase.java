@@ -1,6 +1,8 @@
 package Model;
 
-public class Purchase {
+import java.io.Serializable;
+
+public class Purchase implements Serializable {
     private Customer customer;
     private Pet pet;
     private Date dateOfPurchase;
