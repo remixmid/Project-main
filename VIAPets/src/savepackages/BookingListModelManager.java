@@ -1,10 +1,12 @@
 package savepackages;
 
 import Model.BookingList;
+import Model.Kennel;
 import Model.KennelPlace;
 import Utils.MyFileHandler;
 
 import java.io.File;
+import java.util.Date;
 
 public class BookingListModelManager {
     private String fileName;
@@ -21,22 +23,74 @@ public class BookingListModelManager {
         }
     }
 
+    public void addBooking(KennelPlace kennelPlaceToAdd) {
+        try {
+            // Get existing bookings
+            BookingList existingBookings = getAllBookings();
+
+            // Check for date conflicts for the same kennel place
+            for (KennelPlace existing : existingBookings.getBookingList()) {
+                if (existing.getKennelPlaceId() == kennelPlaceToAdd.getKennelPlaceId()) {
+                    // Check if dates overlap
+                    boolean overlap = isDateOverlap(
+                            kennelPlaceToAdd.getDateIn(),
+                            kennelPlaceToAdd.getDateOut(),
+                            existing.getDateIn(),
+                            existing.getDateOut()
+                    );
+
+                    if (overlap) {
+                        throw new IllegalStateException("This kennel place is already booked for the selected dates.");
+                    }
+                }
+            }
+
+            // If no conflicts, add the booking
+            BookingList bookingList = getAllBookings();
+            bookingList.addBooking(
+                    kennelPlaceToAdd.getDateIn(),
+                    kennelPlaceToAdd.getDateOut(),
+                    kennelPlaceToAdd.getPet(),
+                    kennelPlaceToAdd.getPrice()
+            );
+            saveBookingList(bookingList);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error adding booking: " + e.getMessage(), e);
+        }
+    }
+
+    private boolean isDateOverlap(Date start1, Date end1, Date start2, Date end2) {
+        // Convert all dates to milliseconds for accurate comparison
+        long start1Ms = start1.getTime();
+        long end1Ms = end1.getTime();
+        long start2Ms = start2.getTime();
+        long end2Ms = end2.getTime();
+
+        // Check if either date range is contained within the other
+        return !(end1Ms <= start2Ms || start1Ms >= end2Ms);
+    }
+
+    // Rest of your existing methods remain the same
     public String getFileName() {
         return fileName;
     }
 
     public BookingList getAllBookings() {
         BookingList bookingList = new BookingList();
-
         try {
-
             Object[] objects = MyFileHandler.readArrayFromBinaryFile(fileName);
-
-            for(Object obj : objects) {
-                KennelPlace kennelPlace = (KennelPlace) obj;
-                bookingList.addBooking(kennelPlace.getDateIn(), kennelPlace.getDateOut(), kennelPlace.getPet(), kennelPlace.getPrice());
+            if (objects != null && objects.length > 0) {
+                for (Object obj : objects) {
+                    KennelPlace kennelPlace = (KennelPlace) obj;
+                    bookingList.addBooking(
+                            kennelPlace.getDateIn(),
+                            kennelPlace.getDateOut(),
+                            kennelPlace.getPet(),
+                            kennelPlace.getPrice()
+                    );
+                }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,39 +104,4 @@ public class BookingListModelManager {
             e.printStackTrace();
         }
     }
-
-    public void editBookingList(KennelPlace kennelPlaceToChange, KennelPlace newKennelPlace) {
-        BookingList bookingList = getAllBookings();
-        try {
-            for (KennelPlace kennelPlaceFromList : bookingList.getBookingList()) {
-                if(kennelPlaceFromList.equals(kennelPlaceToChange))
-                    kennelPlaceFromList = newKennelPlace;
-        }
-            saveBookingList(bookingList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteBooking(KennelPlace kennelPlaceToDelete) {
-        try {
-            BookingList bookingList = getAllBookings();
-            bookingList.removeBooking(kennelPlaceToDelete);
-            saveBookingList(bookingList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addBooking(KennelPlace kennelPlaceToAdd) {
-        try {
-            BookingList bookingList = getAllBookings();
-            bookingList.addBooking(kennelPlaceToAdd.getDateIn(), kennelPlaceToAdd.getDateOut(), kennelPlaceToAdd.getPet(), kennelPlaceToAdd.getPrice());
-            saveBookingList(bookingList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
 }

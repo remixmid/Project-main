@@ -66,8 +66,8 @@ public class AddCustomerView {
 
         // Add Labels
         nameLabel = new Label("Name");
-        emailLabel = new Label("Email");
-        phoneLabel = new Label("Phone number");
+        emailLabel = new Label("Phone number");
+        phoneLabel = new Label("Email");
         addressLabel = new Label("Address");
         gridPane.add(nameLabel, 0, 0);
         gridPane.add(emailLabel, 0, 1);
