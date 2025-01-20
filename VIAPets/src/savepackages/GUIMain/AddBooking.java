@@ -180,22 +180,74 @@ public class AddBooking {
         });
     }
     private void saveBooking() {
-        Price price1 = new Price(Integer.parseInt(priceField.getText()));
-        KennelPlace kennelPlaceToAdd = new KennelPlace(price1);
-        int selectedKennelPlaceId = kennelPlaceField.getSelectionModel().getSelectedItem();
-        kennelPlaceToAdd.setPet(petField.getValue().toString());
-        LocalDate dateIn = dateInPicker.getValue();
-        LocalDate dateOut = dateOutPicker.getValue();
-        java.util.Date setDateIn = new java.util.Date(dateIn.getDayOfMonth(), dateIn.getMonthValue(), dateIn.getYear());
-        java.util.Date setDateOut = new Date(dateOut.getDayOfMonth(), dateOut.getMonthValue(), dateOut.getYear());
+        try {
+            // Validate input
+            if (petField.getValue() == null ||
+                    priceField.getText().isEmpty() ||
+                    dateInPicker.getValue() == null ||
+                    dateOutPicker.getValue() == null ||
+                    kennelPlaceField.getValue() == null) {
 
-        kennelPlaceToAdd.setPet(petField.getValue().toString());
-        kennelPlaceToAdd.setDateIn(setDateIn);
-        kennelPlaceToAdd.setDateOut(setDateOut);
-        kennelPlaceToAdd.setOccupied(true);
-        kennelPlaceToAdd.setKennelPlaceId(selectedKennelPlaceId);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Input Error");
+                alert.setContentText("Please fill in all fields");
+                alert.showAndWait();
+                return;
+            }
 
-        BookingListModelManager bookingListModelManagerManager = new BookingListModelManager();
-        bookingListModelManagerManager.addBooking(kennelPlaceToAdd);
+            // Validate dates
+            if (dateInPicker.getValue().isBefore(dateOutPicker.getValue()) == false) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Date Error");
+                alert.setContentText("Check-out date must be after check-in date");
+                alert.showAndWait();
+                return;
+            }
+
+            int price = Integer.parseInt(priceField.getText());
+            Price price1 = new Price(price);
+            KennelPlace kennelPlaceToAdd = new KennelPlace(price1);
+
+            int selectedKennelPlaceId = kennelPlaceField.getValue();
+            kennelPlaceToAdd.setKennelPlaceId(selectedKennelPlaceId);
+            kennelPlaceToAdd.setPet(petField.getValue().toString());
+
+            LocalDate dateIn = dateInPicker.getValue();
+            LocalDate dateOut = dateOutPicker.getValue();
+            if (dateOut.isBefore(dateIn) || dateOut.isEqual(dateIn)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Invalid Dates");
+                alert.setContentText("Check-out date must be after check-in date");
+                alert.showAndWait();
+                return;
+            }
+
+// Convert to java.util.Date properly
+            kennelPlaceToAdd.setDateIn(java.sql.Date.valueOf(dateIn));
+            kennelPlaceToAdd.setDateOut(java.sql.Date.valueOf(dateOut));
+            kennelPlaceToAdd.setOccupied(true);
+
+            BookingListModelManager bookingListModelManager = new BookingListModelManager();
+            bookingListModelManager.addBooking(kennelPlaceToAdd);
+
+            stage.close();
+
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Input Error");
+            alert.setContentText("Please enter a valid price");
+            alert.showAndWait();
+        } catch (IllegalStateException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Booking Error");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("An error occurred while saving the booking");
+            alert.showAndWait();
+            e.printStackTrace();
+        }
     }
 }

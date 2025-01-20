@@ -338,13 +338,15 @@ public class MainView extends Application {
 
     private void addKennelButton() {
         try {
-            kennelModelManager.addKennelPlace(new Price(0));
+            Price price = new Price(0);  // Default price
+            kennelModelManager.addKennelPlace(price);
+            System.out.println("Refreshing kennel view...");
             refreshKennel();
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Failed to Add Kennel Place");
-            alert.setContentText(e.getMessage());
+            alert.setContentText("Error: " + e.getMessage());
             alert.showAndWait();
             e.printStackTrace();
         }

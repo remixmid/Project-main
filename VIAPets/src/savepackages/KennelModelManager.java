@@ -18,107 +18,47 @@ public class KennelModelManager {
         this.fileName = "Kennel.bin";
         try {
             File file = new File(this.fileName);
-            System.out.println("Attempting to create file at: " + file.getAbsolutePath());
-
             if (!file.exists()) {
-                boolean created = file.createNewFile();
-                System.out.println("File creation attempt: " + created);
+                file.createNewFile();
+                // Initialize with default kennel places 1-10
+                Kennel kennel = new Kennel();
+                for (int i = 1; i <= 10; i++) {
+                    KennelPlace place = new KennelPlace(new Price(0));
+                    place.setKennelPlaceId(i);
+                    place.setOccupied(false);
+                    kennel.addPlace(place);
+                }
+                saveKennel(kennel);
             }
-
-            System.out.println("Can write to file: " + file.canWrite());
         } catch (Exception e) {
             System.err.println("Error initializing kennel file:");
             e.printStackTrace();
         }
     }
 
-
-    public ArrayList<KennelPlace> getKennelPlacesAsArrayList() {
-        try {
-            Object[] objects = MyFileHandler.readArrayFromBinaryFile(fileName);
-            ArrayList<KennelPlace> kennelPlaces = new ArrayList<>();
-            for (Object obj : objects) {
-                kennelPlaces.add((KennelPlace) obj);
-            }
-            return kennelPlaces;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public Kennel getKennel() {
         Kennel kennel = new Kennel();
         try {
             Object[] objects = MyFileHandler.readArrayFromBinaryFile(fileName);
-            if (objects != null) {
+            if (objects != null && objects.length > 0) {
                 for (Object obj : objects) {
                     if (obj instanceof KennelPlace) {
-                        KennelPlace kennelPlace = (KennelPlace) obj;
-                        kennel.addPlace(kennelPlace);
+                        kennel.addPlace((KennelPlace) obj);
                     }
                 }
             }
-        } catch (EOFException e) {
-            // File is empty or not properly initialized
-            System.out.println("Kennel file is empty. Creating a new kennel.");
         } catch (Exception e) {
+            System.err.println("Error reading kennel file: " + e.getMessage());
             e.printStackTrace();
         }
         return kennel;
     }
 
-    public void editKennel() {
-        try {
-            // Read all existing pets from the file
-            Object[] objects = MyFileHandler.readArrayFromBinaryFile(this.fileName);
-
-            Kennel kennel = new Kennel();
-
-            for (Object obj : objects) {
-                KennelPlace kennelPlace = (KennelPlace) obj;
-
-                BookingListModelManager bookingListModelManager = new BookingListModelManager();
-                Object[] objectsOfBookings = MyFileHandler.readArrayFromBinaryFile(bookingListModelManager.getFileName());
-                if (objectsOfBookings.length > 0) {
-                    for (Object objOfBookings : objectsOfBookings) {
-                        KennelPlace booking = (KennelPlace) objOfBookings;
-                        Date dateToCheckIn = new Date(booking.getDateIn().getDay(), booking.getDateIn().getMonth(), booking.getDateIn().getYear());
-                        Date dateToCheckOut = new Date(booking.getDateOut().getDay(), booking.getDateOut().getMonth(), booking.getDateOut().getYear());
-                        LocalDate today = LocalDate.now();
-                        if (dateToCheckIn.before(new Date(today.getDayOfMonth(), today.getMonthValue(), today.getYear())) &&
-                                dateToCheckOut.after(new Date(today.getDayOfMonth(), today.getMonthValue(), today.getYear()))) {
-                            kennelPlace.setOccupied(true);
-                            break;
-                        } else {
-                            kennelPlace.setOccupied(false);
-                        }
-                    }
-                    kennel.addPlace(kennelPlace);
-                }
-            }
-            saveKennel(kennel);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void saveKennel(Kennel kennel) {
         try {
-            // Ensure the directory exists
-            File file = new File(this.fileName);
-            file.getParentFile().mkdirs(); // Create parent directories if they don't exist
-
-            // Use try-with-resources to ensure the stream is properly closed
-            try (FileOutputStream fos = new FileOutputStream(file);
-                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-
-                // Get the list of kennel places
-                ArrayList<KennelPlace> kennelPlaces = kennel.getAllKennelPlaces();
-
-                // Write the list to the file
-                oos.writeObject(kennelPlaces.toArray(new KennelPlace[0]));
-            }
+            ArrayList<KennelPlace> places = kennel.getAllKennelPlaces();
+            KennelPlace[] placesArray = places.toArray(new KennelPlace[0]);
+            MyFileHandler.writeArrayToBinaryFile(fileName, placesArray);
         } catch (Exception e) {
             System.err.println("Error saving kennel: " + e.getMessage());
             e.printStackTrace();
@@ -128,9 +68,25 @@ public class KennelModelManager {
     public void addKennelPlace(Price price) {
         try {
             Kennel kennel = getKennel();
-            kennel.addKennelPlace(price);
+            KennelPlace newPlace = new KennelPlace(price);
+
+            // Find highest existing ID
+            int maxId = 0;
+            for (KennelPlace place : kennel.getAllKennelPlaces()) {
+                if (place.getKennelPlaceId() > maxId) {
+                    maxId = place.getKennelPlaceId();
+                }
+            }
+
+            // Set new ID and properties
+            newPlace.setKennelPlaceId(maxId + 1);
+            newPlace.setOccupied(false);
+
+            // Add and save
+            kennel.addPlace(newPlace);
             saveKennel(kennel);
-            System.out.println("Kennel place added successfully"); // Debug print
+
+            System.out.println("Successfully added kennel place with ID: " + (maxId + 1));
         } catch (Exception e) {
             System.err.println("Error adding kennel place: " + e.getMessage());
             e.printStackTrace();
